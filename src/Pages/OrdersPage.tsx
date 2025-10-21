@@ -2,10 +2,12 @@ import { useGetOrder } from "@/http/useGetOrder"
 import { type getOrderUserType } from "@/types/get-orderUser-type"
 import {EllipsisVertical } from "lucide-react"
 import dayjs from "dayjs"
+import { Navigate } from "react-router-dom"
 
 export function OrdersPage() {
+   
     const {data}: {data?: getOrderUserType} = useGetOrder()
-    console.log(data)
+    if(!data) { return <Navigate to="/" replace/>}
     
     return (
          <main className="h-screen bg-[#171819] flex flex-col items-center justify-center gap-14">

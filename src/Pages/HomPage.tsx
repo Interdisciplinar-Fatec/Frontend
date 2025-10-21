@@ -1,6 +1,13 @@
 import { FormOrder } from "@/components/form-order";
+import { useAuth } from "@/http/useAuth";
+import { Navigate } from "react-router-dom";
 
 export  function HomePage(){
+    const {data} = useAuth()
+
+    if (data?.ok || data?.status === true) {
+        return <Navigate to="/dashboard" replace />
+    }
 
     return (
         <main className="h-screen bg-[#171819] flex flex-col items-center justify-center gap-14">
