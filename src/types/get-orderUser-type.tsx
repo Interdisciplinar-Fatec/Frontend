@@ -1,13 +1,14 @@
 type productType = {
     id: string,
-    nome: string,
-    preco: number,
-    marca: string,
-    descricao: string | null,
+    Nome: string,
+    Preco: number,
+    Marca: string,
+    Descricao: string | null,
 }
 
 type Order = {
     PedidoId: string;
+    Status: string;
     DataPedido: string;
     ValorPedido: string;
     descricaoPedido: string;

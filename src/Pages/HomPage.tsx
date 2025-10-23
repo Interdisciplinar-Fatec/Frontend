@@ -1,4 +1,4 @@
-import { FormOrder } from "@/components/form-order";
+import { FormOrder } from "@/components/login";
 import { useAuth } from "@/http/useAuth";
 import { Navigate } from "react-router-dom";
 
