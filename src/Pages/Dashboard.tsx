@@ -5,6 +5,7 @@ import {PanelLeftOpen} from "lucide-react"
 import {PanelLeftClose} from "lucide-react"
 import { useState } from "react"
 import { CardUser } from "@/components/cardUser"
+import { CardProduct } from "@/components/cardProducts"
 
 export  function DashboardPage(){
     const {isLoading,data} = useAuth()
@@ -12,7 +13,7 @@ export  function DashboardPage(){
 
     const [cardUser, setCardUser] = useState<boolean>(false)
     const [cardOrder, setCardOrder] = useState<boolean>(false)
-    const [cardProducts, setCardProducts] = useState<boolean>(false)
+    const [cardProduct, setCardProduct] = useState<boolean>(false)
 
     if(isLoading) { return <div className="text-white bg-[#171819]"><h2>Carregando...</h2></div>}
     if (!data?.ok || data?.status === false) {
@@ -32,7 +33,7 @@ export  function DashboardPage(){
                 className={`hidden md:block ${toggle ? "block" : "hidden"}`} 
                 setCardOrder={setCardOrder} 
                 setCardUser={setCardUser} 
-                setCardProduct={setCardProducts}
+                setCardProduct={setCardProduct}
             />
             {
                 toggle ? (
@@ -42,16 +43,14 @@ export  function DashboardPage(){
                 )
             }
             {/* flex flex-wrap */}
-            <section className={`h-full md:col-span-3 lg:col-span-4 ${toggle ? "col-span-2" : "col-span-5 overflow-y-auto"} 
+            <section className={`h-full md:col-span-3 lg:col-span-4 pr-6 ${toggle ? "col-span-2" : "col-span-5 overflow-y-auto"} 
                 
-                grid-cols-2 grid-rows-2 place-items-stretch gap-2 
+                grid-cols-2 grid-rows-2 place-items-stretch space-y-4
             `}>
 
-                {
-                cardUser && (
-                    <CardUser />
-                )
-                }
+                { cardUser && <CardUser /> }
+                { cardProduct && <CardProduct /> }
+
             </section>
         </main>
     )
