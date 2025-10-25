@@ -8,10 +8,10 @@ import {
     TableCaption,
     TableCell
 } from "@/components/ui/table"
-import type { getUserType } from "@/types/get-users-type"
+import type { getUserType } from "@/http/types/get-users-type"
 import { useState } from "react"
 
-export const TableUsers = ({data}: {data: getUserType}) => {
+export const TableUsers = ({data}: {data: getUserType | undefined}) => {
     const [copied, setCopied] = useState<boolean>(false)
 
     const handleToggleRow = async (id: string) => {
