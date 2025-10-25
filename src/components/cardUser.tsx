@@ -19,6 +19,11 @@ import z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Input } from "./ui/input"
 import { Button } from "./ui/button"
+import { useGetUsers } from "@/http/useGetUsers"
+import { useGetUserId } from "@/http/useGetUserId"
+import { useState } from "react"
+import dayjs from "dayjs"
+import { Li } from "@/components/li"
 
 
 const formSchema = z.object({
@@ -26,6 +31,10 @@ const formSchema = z.object({
 })
 
 export const CardUser = () => {
+    const [userId, setUserId] = useState<string | undefined>()
+
+    const {data: dataUsers} = useGetUsers();
+    const {data: dataUser} = useGetUserId(userId);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -35,23 +44,8 @@ export const CardUser = () => {
     })
 
     const handleForm = async (values: z.infer<typeof formSchema>) => {
-        console.log(values.id)
+        setUserId(values.id)
     }
-
-    const data = [
-        {
-            id: "11111111111111111111",
-            name: "string",
-            email: "string",
-            crated_at: new Date()
-        },
-        {
-            id: "0000000000000000",
-            name: "string2",
-            email: "string2",
-            crated_at: new Date()
-        }
-    ]
 
     return (
         <Card className={`col-span-2 flex-1 `}>
@@ -60,9 +54,9 @@ export const CardUser = () => {
                 <CardDescription>Dados dos clientes</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-                <section>
+                <section className="flex flex-col space-y-5">
                     <Form {...form}>
-                        <form className="flex items-end gap-2" onSubmit={() => handleForm}>
+                        <form className="flex items-end gap-2" onSubmit={form.handleSubmit(handleForm)}>
                             <FormField 
                                 name="id"
                                 control={form.control}
@@ -79,8 +73,28 @@ export const CardUser = () => {
                             <Button type="submit" variant={"outline"}>Buscar</Button>
                         </form>
                     </Form>
+                   {
+                    dataUser && (
+                        <section className="">
+                            <h2>Ultimo usuario consultado:</h2>
+                             {
+                                dataUser.map(user => (
+                                    <ul className="bg-[#B1B3B6] p-2 pl-4" key={user.id}>
+                                        <Li label="ID" value={user.id} />
+                                        <Li label="Nome" value={user.name} />
+                                        <Li label="CPF" value={user.CPF} />
+                                        <Li label="Data de nascimento" value={dayjs(user.data_nascimento).format("DD/MM/YYYY")} />
+                                        <Li label="Telefone" value={user.telefone} />
+                                        <Li label="Endereço" value={user.endereco} />
+                                    </ul>
+                                ))
+                            }
+                         
+                        </section>
+                    )
+                   }
                 </section>
-               <TableUsers data={data}></TableUsers>
+               <TableUsers data={dataUsers}></TableUsers>
             </CardContent>
         </Card>
     )

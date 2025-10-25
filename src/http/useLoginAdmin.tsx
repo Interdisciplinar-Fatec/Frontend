@@ -1,5 +1,5 @@
-import type { LoginResponseType } from "@/types/response-loginAdmin-type";
-import type { LoginType } from "@/types/post-loginAdmin-type";
+import type { LoginResponseType } from "@/http/types/response-loginAdmin-type";
+import type { LoginType } from "@/http/types/post-loginAdmin-type";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 

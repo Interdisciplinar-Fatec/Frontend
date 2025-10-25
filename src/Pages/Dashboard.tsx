@@ -25,7 +25,7 @@ export  function DashboardPage(){
 
     return (
         <main className={`h-screen bg-[#171819] items-center justify-center gap-14
-            grid grid-cols-5 grid-rows-1 p-3
+            grid grid-cols-5 grid-rows-1 p-6
             
         `}>
             <SideBar 
@@ -42,10 +42,11 @@ export  function DashboardPage(){
                 )
             }
             {/* flex flex-wrap */}
-            <section className={`h-screen md:col-span-3 lg:col-span-4 p-3 ${toggle ? "col-span-2" : "col-span-5 overflow-y-auto"} 
+            <section className={`h-full md:col-span-3 lg:col-span-4 ${toggle ? "col-span-2" : "col-span-5 overflow-y-auto"} 
                 
                 grid-cols-2 grid-rows-2 place-items-stretch gap-2 
             `}>
+
                 {
                 cardUser && (
                     <CardUser />

@@ -1,4 +1,4 @@
-import type { getOrderUserType } from "../types/get-orderUser-type"
+import type { getOrderUserType } from "./types/get-orderUser-type"
 
 export const getOrderUser = async (CPF: string): Promise<getOrderUserType | { adminCPF: boolean }> => {
 

@@ -1,6 +1,6 @@
 import { TableOrders } from "@/components/table-orders"
 import { useGetOrder } from "@/http/useGetOrder"
-import { type getOrderUserType } from "@/types/get-orderUser-type"
+import { type getOrderUserType } from "@/http/types/get-orderUser-type"
 import { ArrowLeft } from "lucide-react"
 import { Navigate } from "react-router-dom"
 

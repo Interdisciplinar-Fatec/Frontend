@@ -1,5 +1,5 @@
 import dayjs from "dayjs"
-import { type getOrderUserType } from "@/types/get-orderUser-type"
+import { type getOrderUserType } from "@/http/types/get-orderUser-type"
 import {
     Table,
     TableHead,

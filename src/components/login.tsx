@@ -4,10 +4,10 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { useForm } from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod"
 import { z } from "zod"
-import { getOrderUser } from "@/http/get-order-user";
+import { getOrderUser } from "@/http/useGetOrderUser";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { useLoginAdmin } from "@/http/useLogin-admin";
+import { useLoginAdmin } from "@/http/useLoginAdmin";
 
 const formSchema = z.object({
     CPF: z.string(),
