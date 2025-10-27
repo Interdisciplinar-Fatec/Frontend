@@ -5,7 +5,7 @@ export const useGetUsers = () => {
     return useQuery({
         queryKey: ['get-users'],
         queryFn: async (): Promise<getUserType> => {
-            const response = await fetch("http://localhost:3333/users_admin", {
+            const response = await fetch("http://localhost:3333/admin/users", {
                 credentials: 'include'
             })
             const data: getUserType = await response.json()

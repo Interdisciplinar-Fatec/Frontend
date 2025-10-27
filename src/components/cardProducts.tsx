@@ -68,7 +68,6 @@ export const CardProduct = () => {
     }
 
     const handleProductForm = async (values: z.infer<typeof formProductSchema>) => {
-        console.log(values)
         createProduct({
             nome: values.nome,
             marca: values.marca,

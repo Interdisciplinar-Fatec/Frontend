@@ -5,7 +5,7 @@ export const useGetProducts = () => {
     return useQuery({
         queryKey: ['get-products'],
         queryFn: async (): Promise<getProductType> => {
-            const response = await fetch("http://localhost:3333/products_admin", {
+            const response = await fetch("http://localhost:3333/admin/products", {
                 credentials: 'include'
             })
             const data: getProductType = await response.json()
