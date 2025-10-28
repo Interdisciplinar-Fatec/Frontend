@@ -45,6 +45,7 @@ export const CardUser = () => {
 
     const handleForm = async (values: z.infer<typeof formSchema>) => {
         setUserId(values.id)
+        form.reset()
     }
 
     return (

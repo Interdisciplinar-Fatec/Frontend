@@ -31,14 +31,12 @@ export const FormOrder = () => {
         try {
             if(!isForm) {
                 const result = await getOrderUser(values.CPF);
-
                 if ("adminCPF" in result && result.adminCPF) { 
                    return setIsForm(true) 
                 } 
                 else { return navigate("/user/order") }
             } 
-            
-            console.log(values.Senha)
+
             postLogin({
                 CPF: values.CPF,
                 Senha: values.Senha

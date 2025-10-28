@@ -6,6 +6,7 @@ import {PanelLeftClose} from "lucide-react"
 import { useState } from "react"
 import { CardUser } from "@/components/cardUser"
 import { CardProduct } from "@/components/cardProducts"
+import { CardOrder } from "@/components/cardOrder"
 
 export  function DashboardPage(){
     const {isLoading,data} = useAuth()
@@ -50,6 +51,7 @@ export  function DashboardPage(){
 
                 { cardUser && <CardUser /> }
                 { cardProduct && <CardProduct /> }
+                { cardOrder && <CardOrder /> }
 
             </section>
         </main>
