@@ -12,13 +12,12 @@ import type { getUserType } from "@/http/types/get-users-type"
 import { useState } from "react"
 
 export const TableUsers = ({data}: {data: getUserType | undefined}) => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [copied, setCopied] = useState<boolean>(false)
 
     const handleToggleRow = async (id: string) => {
         try {
             await navigator.clipboard.writeText(id)
-            setCopied(true)
+            setCopied(!copied)
             setInterval(() => setCopied(false), 2000)
         } catch (error) {
             console.log(error)
