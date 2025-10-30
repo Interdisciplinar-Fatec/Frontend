@@ -19,18 +19,17 @@ export const SideBar = ({
     className,
     setCardOrder,
     setCardProduct,
-    setCardUser
+    setCardUser,
 }: SidebarProps) => {
     return (
-        <Card className={`h-full w-full col-span-3 row-span-1 pt-15
-            md:col-span-2 lg:col-span-1  ${className} space-y-4
+        <Card className={`h-full w-full pt-10 ${className} space-y-4
         `}>
             <CardHeader>
                 <CardTitle>Dashboard</CardTitle>
                 <CardDescription>Painel adimistrativo</CardDescription>
             </CardHeader>
-            <CardContent>
-                <ul className="flex flex-col gap-2">
+            <CardContent className="h-1/2">
+                <ul className="flex flex-col gap-2 h-full">
                     <li className="flex gap-1">
                         <Checkbox onCheckedChange={setCardUser} id="Clientes"/>
                         <Label htmlFor="Clientes">Clientes</Label>

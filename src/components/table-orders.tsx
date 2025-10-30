@@ -22,9 +22,9 @@ export const TableOrders = ({data}: {data: orderType[]}) => {
                     <TableHead className="text-[#B1B3B6] font-bold">Total do serviço</TableHead>
                 </TableRow>
             </TableHeader>
-            <TableBody>
+            <TableBody className="xs:text-xs overflow-x-auto">
                 {
-                        data.length <= 0 ? (
+                    data.length <= 0 ? (
                             <TableRow>
                                 <TableCell colSpan={4} className="p-0">
                                     <div className="w-full text-center mt-2">

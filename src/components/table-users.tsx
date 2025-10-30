@@ -33,7 +33,7 @@ export const TableUsers = ({data}: {data: getUserType | undefined}) => {
                     <TableHead className="text-[#B1B3B6] font-bold">Criação da conta</TableHead>
                 </TableRow>
             </TableHeader>
-            <TableBody>
+            <TableBody className="xs:text-xs overflow-x-auto">
                     {
                         data?.map(cell => {
                             const date = dayjs(cell.crated_at).format("DD/MM/YYYY")

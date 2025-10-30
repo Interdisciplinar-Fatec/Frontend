@@ -17,7 +17,7 @@ export  function HomePage(){
                 alt="Ícone de eletrodomésticos"
                  className="w-[140px] md:w-[200px] lg:w-[250px] h-auto object-contain"
                 />
-                <h2 className="font-bold text-sm md:text-lg lg:text-3xl">Conserto de Eletrodomésticos</h2>
+                <h2 className="font-bold w-6/7 text-center text-xs text-wrap sm:text-lg md:text-2xl lg:text-3xl">Conserto de Eletrodomésticos</h2>
             </section>
             <section className="flex flex-col w-full max-w-sm items-center gap-4 flex-1">
                 <FormOrder />

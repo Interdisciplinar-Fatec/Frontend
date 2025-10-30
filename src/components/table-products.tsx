@@ -23,7 +23,7 @@ export const TableProducts = ({data}: {data: getProductType | undefined}) => {
                         <TableHead className="text-[#B1B3B6] font-bold">Descrição</TableHead>
                     </TableRow>
                 </TableHeader>
-                <TableBody>
+                <TableBody className="text-xs overflow-x-auto">
                         {
                             data?.map(cell => {
                                 return (

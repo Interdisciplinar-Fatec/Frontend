@@ -50,15 +50,17 @@ export const FormOrder = () => {
     return (
         <div className="flex gap-4">
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(handleForm)} className="flex items-end gap-2">
+                <form onSubmit={form.handleSubmit(handleForm)} className="flex items-end flex-col
+                    sm:gap-2 gap-4 sm:flex-row
+                ">
                     <FormField
                         control={form.control}
                         name="CPF"
                         render={({field})=> (
                             <FormItem>
-                                <FormLabel></FormLabel>
+                                <FormLabel className="text-white">CPF:</FormLabel>
                                 <FormControl>
-                                    <Input className="text-white" placeholder="CPF" {...field} />
+                                    <Input className="text-white sm:w-53 xss:w-45 w-30" placeholder="CPF" {...field} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -70,9 +72,9 @@ export const FormOrder = () => {
                             name="Senha"
                             render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Admin Code</FormLabel>
+                                <FormLabel className="text-white">Senha do Admin</FormLabel>
                                 <FormControl>
-                                <Input className="text-white" placeholder="Senha" {...field} />
+                                <Input className="text-white sm:w-53 xss:w-45 w-30" placeholder="Senha" {...field} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>

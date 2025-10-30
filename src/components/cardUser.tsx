@@ -49,7 +49,7 @@ export const CardUser = () => {
     }
 
     return (
-        <Card className={`col-span-2 flex-1 `}>
+        <Card className={`col-span-2 flex-1`}>
             <CardHeader>
                 <CardTitle>Clientes</CardTitle>
                 <CardDescription>Dados dos clientes</CardDescription>
@@ -57,7 +57,10 @@ export const CardUser = () => {
             <CardContent className="space-y-6">
                 <section className="flex flex-col space-y-5">
                     <Form {...form}>
-                        <form className="flex items-end gap-2" onSubmit={form.handleSubmit(handleForm)}>
+                        <form onSubmit={form.handleSubmit(handleForm)} className="flex gap-2
+                            xs:flex-row xs:items-end
+                            flex-col items-center
+                        ">
                             <FormField 
                                 name="id"
                                 control={form.control}
@@ -71,7 +74,7 @@ export const CardUser = () => {
                                      </FormItem>
                             )}
                             />
-                            <Button type="submit" variant={"outline"}>Buscar</Button>
+                            <Button className="w-full xs:w-auto" type="submit" variant={"outline"}>Buscar</Button>
                         </form>
                     </Form>
                    {
