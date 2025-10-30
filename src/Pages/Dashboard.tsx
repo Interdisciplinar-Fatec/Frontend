@@ -26,32 +26,38 @@ export  function DashboardPage(){
     }
 
     return (
-        <main className={`h-screen bg-[#171819] items-center justify-center gap-14
-            grid grid-cols-5 grid-rows-1 p-6
-            
+        <main className={`h-screen bg-[#171819] items-center justify-between gap-14
+            p-6 grid lg:grid-cols-5 lg:grid-rows-1
+            grid-cols-1 grid-rows-8             
         `}>
-            <SideBar 
-                className={`hidden md:block ${toggle ? "block" : "hidden"}`} 
-                setCardOrder={setCardOrder} 
-                setCardUser={setCardUser} 
-                setCardProduct={setCardProduct}
-            />
-            {
-                toggle ? (
-                    <PanelLeftClose className={`absolute top-5 left-5 md:hidden ${toggle ? "text-black" : "text-white"}`} onClick={() => handdleToggle()} />
-                ) : (
-                    <PanelLeftOpen className={`absolute top-5 left-5 md:hidden ${toggle ? "text-black" : "text-white"}`} onClick={() => handdleToggle()} />
-                )
-            }
-            {/* flex flex-wrap */}
-            <section className={`h-full md:col-span-3 lg:col-span-4 pr-6 ${toggle ? "col-span-2" : "col-span-5 overflow-y-auto"} 
-                
-                grid-cols-2 grid-rows-2 place-items-stretch space-y-4
+            <section className={`${toggle && "flex flex-row-reverse row-span-8"} gap-2 w-full h-full 
+                lg:col-span-1 lg:row-span-1
+                row-span-1 col-span-1      
             `}>
+                <SideBar 
+                    className={`hidden lg:block ${toggle ? "block" : "hidden"}`} 
+                    setCardOrder={setCardOrder} 
+                    setCardUser={setCardUser} 
+                    setCardProduct={setCardProduct}
+                />
+                {
+                    toggle ? (
+                        <PanelLeftClose className={`self-start lg:hidden text-white`} onClick={() => handdleToggle()} />
+                    ) : (
+                        <PanelLeftOpen className={`self-start lg:hidden text-white`} onClick={() => handdleToggle()} />
+                    )
+                }
+            </section>
+            {/* flex flex-wrap */}
+            <section className={` ${toggle ? "hidden lg:col-span-2 lg:block" : "md:col-span-5 overflow-y-auto"} space-y-4 h-full  pr-6
+                lg:col-span-4 lg:row-span-1 
+                row-span-7 col-span-1 
+            `}>
+                 {/* place-items-stretch */}
 
-                { cardUser && <CardUser /> }
-                { cardProduct && <CardProduct /> }
-                { cardOrder && <CardOrder /> }
+                { cardUser && !toggle  && <CardUser /> }
+                { cardProduct && !toggle  && <CardProduct /> }
+                { cardOrder && !toggle && <CardOrder /> }
 
             </section>
         </main>

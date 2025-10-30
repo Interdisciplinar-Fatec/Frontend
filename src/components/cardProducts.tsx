@@ -86,7 +86,10 @@ export const CardProduct = () => {
             <CardContent className="space-y-6">
                 <section className="flex flex-col space-y-5">
                     <Form {...formSearch}>
-                        <form className="flex items-end gap-2" onSubmit={formSearch.handleSubmit(handleSearchForm)}>
+                        <form onSubmit={formSearch.handleSubmit(handleSearchForm)}  className="flex gap-2
+                            xs:flex-row xs:items-end
+                            flex-col items-center
+                        ">
                             <FormField 
                                 name="nome"
                                 control={formSearch.control}
@@ -94,13 +97,13 @@ export const CardProduct = () => {
                                      <FormItem className="flex-1">
                                         <FormLabel></FormLabel>
                                         <FormControl>
-                                            <Input type="text" placeholder="Digite o nome para buscar um produto ..." {...field}/>
+                                            <Input className="text-sm" type="text" placeholder="Digite o nome para buscar um produto ..." {...field}/>
                                         </FormControl>
-                                        <FormMessage></FormMessage>
+                                        <FormMessage />
                                      </FormItem>
                             )}
                             />
-                            <Button type="submit" variant={"outline"}>Buscar</Button>
+                            <Button className="w-full xs:w-auto" type="submit" variant={"outline"}>Buscar</Button>
                         </form>
                     </Form>
                    {

@@ -106,7 +106,10 @@ export const CardOrder = () => {
             <CardContent className="space-y-6">
                 <section className="flex flex-col space-y-5">
                     <Form {...formSearch}>
-                        <form className="flex items-end gap-2" onSubmit={formSearch.handleSubmit(handleSearchForm)}>
+                        <form onSubmit={formSearch.handleSubmit(handleSearchForm)} className="flex gap-2
+                            xs:flex-row xs:items-end
+                            flex-col items-center
+                        ">
                             <FormField 
                                 name="nome"
                                 control={formSearch.control}
@@ -120,7 +123,7 @@ export const CardOrder = () => {
                                      </FormItem>
                             )}
                             />
-                            <Button type="submit" variant={"outline"}>Buscar</Button>
+                            <Button className="w-full xs:w-auto" type="submit" variant={"outline"}>Buscar</Button>
                         </form>
                     </Form>
                    {
@@ -243,24 +246,28 @@ export const CardOrder = () => {
                             />
 
                            <section className="space-y-4">
-                                <h2 className="mt-6">Criação dos produtos do pedido:</h2>
+                                <h2 className="mt-6 text-xs xs:text-sm">Criação dos produtos do pedido:</h2>
 
                                 {fields.map((item, index) => (
-                                <div key={item.id} className="flex items-center gap-4 p-3">
+                                <div key={item.id} className="flex bg-gray-100 rounded-lg 
+                                    xs:flex-row xs:items-center xs:gap-4 xs:p-3
+                                    flex-col items-start gap-1 p-6
+                                ">
                                     <Label >Id: </Label>
                                     <Input  {...register(`items.${index}.id_produto`)} placeholder="Id Produto"/>
                                     <Label >Quantidade: </Label>
                                     <Input type="number" {...register(`items.${index}.quantidade`, { valueAsNumber: true })} />
-                                    <Button type="button" onClick={() => remove(index)}>Remover</Button>
+                                    <Button className="w-full xs:w-auto" type="button" onClick={() => remove(index)}>Remover</Button>
+                                    <hr className="border-gray-100 border-1 w-full xs:hidden" />
                                 </div>
                                 ))}
 
-                                <Button className="mb-4" type="button" onClick={() => append({ id_produto: "", quantidade: 1 })}>
+                                <Button className="mb-4 w-full xs:w-auto" variant={"outline"} type="button" onClick={() => append({ id_produto: "", quantidade: 1 })}>
                                     Adicionar Item
                                 </Button>
                            </section>
 
-                            <Button type="submit">
+                            <Button className="w-full xs:w-auto" variant={"outline"} type="submit">
                                 Criar Pedido
                             </Button>
 

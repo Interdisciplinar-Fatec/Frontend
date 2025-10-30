@@ -28,7 +28,7 @@ export const TableUserOrders = ({data}: {data: getOrderUserType}) => {
                     <TableHead className="text-gray-400 font-bold">Valor</TableHead>
                 </TableRow>
             </TableHeader>
-            <TableBody>
+            <TableBody className="xs:text-xs overflow-x-auto">
                 {
                         data.pedidos.length <= 0 ? (
                             <TableRow>
