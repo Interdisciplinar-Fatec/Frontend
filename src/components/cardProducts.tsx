@@ -25,15 +25,14 @@ import { useGetProducts } from "@/http/useGetUsersProducts"
 import { useGetProductName } from "@/http/useGetProductName"
 import { usePostProduct } from "@/http/usePostProduct"
 
-
 const formSearchSchema = z.object({
-    nome: z.string()
+    nome: z.string().min(3, {error: "O nome deve ter no mínimo 3 caracteres"})
 })
 
 const formProductSchema = z.object({
-    nome: z.string(),
-    marca: z.string(),
-    preco: z.coerce.number(),
+    nome: z.string().min(3, {error: "O nome deve ter no mínimo 3 caracteres"}),
+    marca: z.string().min(2, {error: "A marca deve ter no mínimo 2 caracteres"}),
+    preco: z.coerce.number().min(1, {error: "O preço não pode ser negativo"}),
     descricao: z.string().optional()
 })
 

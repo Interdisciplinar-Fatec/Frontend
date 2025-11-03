@@ -35,7 +35,7 @@ export  function DashboardPage(){
                 row-span-1 col-span-1      
             `}>
                 <SideBar 
-                    className={`hidden lg:block ${toggle ? "block" : "hidden"}`} 
+                    className={`hidden lg:flex ${toggle ? "flex" : "hidden"}`} 
                     setCardOrder={setCardOrder} 
                     setCardUser={setCardUser} 
                     setCardProduct={setCardProduct}

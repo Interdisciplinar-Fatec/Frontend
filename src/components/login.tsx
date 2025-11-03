@@ -10,8 +10,8 @@ import { useState } from "react";
 import { useLoginAdmin } from "@/http/useLoginAdmin";
 
 const formSchema = z.object({
-    CPF: z.string(),
-    Senha: z.string()
+    CPF: z.string().min(11, "CPF deve ter no mínimo 11 caracteres"),
+    Senha: z.string().optional(),
 })
 
 export const FormOrder = () => {
@@ -37,16 +37,26 @@ export const FormOrder = () => {
                 else { return navigate("/user/order") }
             } 
 
+            const senha = values.Senha ?? "";
+            if (isForm) {
+                if (senha.trim() === "" ) {
+                    form.setError("Senha", { type: "required", message: "Senha é obrigatória" });
+                    return;
+                } else if (senha.length <6) {
+                    form.setError("Senha", { type: "minLength", message: "Senha deve ter no mínimo 6 caracteres" });
+                    return;
+                }
+            }
+
             postLogin({
                 CPF: values.CPF,
-                Senha: values.Senha
+                Senha: senha
             })
             
         } catch (error) {
             console.error(error);
         }
     }
-
     return (
         <div className="flex gap-4">
             <Form {...form}>

@@ -25,9 +25,8 @@ import { useState } from "react"
 import dayjs from "dayjs"
 import { Li } from "@/components/li"
 
-
 const formSchema = z.object({
-    id: z.string()
+    id: z.uuid({error: "Insira um ID válido"})
 })
 
 export const CardUser = () => {
@@ -93,7 +92,6 @@ export const CardUser = () => {
                                     </ul>
                                 ))
                             }
-                         
                         </section>
                     )
                    }
