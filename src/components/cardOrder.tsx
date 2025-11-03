@@ -27,21 +27,21 @@ import { usePostOrder } from "@/http/usePostOrder"
 import { Label } from "@radix-ui/react-label"
 
 const formSearchSchema = z.object({
-    nome: z.string()
+    id: z.uuid({error: "Insira um ID válido"})
 })
 
 const formOrderSchema =  z.object({
-    CPF: z.string(),
-    name: z.string().min(3),
-    email: z.email(),
-    endereco: z.string().min(4),
-    data_nascimento: z.string().min(8),
-    telefone: z.string(),
-    valor_total: z.coerce.number(),
+    CPF: z.string().min(11, {error : "Insira um CPF válido"}),
+    name: z.string().min(3, {error: "O nome deve ter no mínimo 3 caracteres"}),
+    email: z.email({error: "Insira um e-mail válido"}),
+    endereco: z.string().min(4, {error: "O endereço deve ter no mínimo 4 caracteres"}),
+    data_nascimento: z.string().min(8, {error: "Insira uma data de nascimento válida"}),
+    telefone: z.string().min(9, {error: "Insira um telefone válido"}),
+    valor_total: z.coerce.number({error: "Preencha o campo corretamente"}).min(1, {error: "O valor total não pode ser negativo"}),
     descricao: z.string(),
     items: z.array(z.object({
-        id_produto: z.uuid(),
-        quantidade: z.number()
+        id_produto: z.uuid({error: "Insira um ID de produto válido"}),
+        quantidade: z.number({error: "Preencha o campo corretamente"}).min(1, {error: "A quantidade deve ser no mínimo 1"})
     }))
 })
 
@@ -56,7 +56,7 @@ export const CardOrder = () => {
     const formSearch = useForm<z.infer<typeof formSearchSchema>>({
         resolver: zodResolver(formSearchSchema),
         defaultValues: {
-            nome: ""
+            id: ""
         },
     })
 
@@ -84,7 +84,7 @@ export const CardOrder = () => {
     })
 
     const handleSearchForm = async (values: z.infer<typeof formSearchSchema>) => {
-        setOrderId(values.nome)
+        setOrderId(values.id)
         formSearch.reset()
     }
 
@@ -111,7 +111,7 @@ export const CardOrder = () => {
                             flex-col items-center
                         ">
                             <FormField 
-                                name="nome"
+                                name="id"
                                 control={formSearch.control}
                                 render={({field}) => (
                                      <FormItem className="flex-1">
@@ -136,8 +136,10 @@ export const CardOrder = () => {
                     <h2>Listagem dos Pedidos: </h2>
                     <TableOrders data={dataOrders ?? []}></TableOrders>
                 <hr />
-               <section>
-                    <h2>Cadastro de Produto: </h2>
+               <section className="p-2">
+                    <h2 className="text-lg">Criar de pedido</h2>
+                    <hr/>
+                    <h3 className="text-sm mt-4">Dados do Cliente: </h3>
                    <Form {...formOrders}>
                         <form className="space-y-1" onSubmit={formOrders.handleSubmit(handleOrderForm)}>
                             <FormField 
@@ -218,6 +220,8 @@ export const CardOrder = () => {
                                     </FormItem>
                                 )}
                             />
+
+                            <h2 className="text-sm mt-4">Dados do Pedido: </h2>
                             <FormField 
                                 name="descricao"
                                 control={formOrders.control}
@@ -249,15 +253,14 @@ export const CardOrder = () => {
                                 <h2 className="mt-6 text-xs xs:text-sm">Criação dos produtos do pedido:</h2>
 
                                 {fields.map((item, index) => (
-                                <div key={item.id} className="flex bg-gray-100 rounded-lg 
-                                    xs:flex-row xs:items-center xs:gap-4 xs:p-3
-                                    flex-col items-start gap-1 p-6
+                                <div key={item.id} className="flex bg-gray-100 rounded-lg                                    
+                                    flex-col items-start gap-2 p-6
                                 ">
                                     <Label >Id: </Label>
                                     <Input  {...register(`items.${index}.id_produto`)} placeholder="Id Produto"/>
                                     <Label >Quantidade: </Label>
-                                    <Input type="number" {...register(`items.${index}.quantidade`, { valueAsNumber: true })} />
-                                    <Button className="w-full xs:w-auto" type="button" onClick={() => remove(index)}>Remover</Button>
+                                    <Input type="number" min={1} {...register(`items.${index}.quantidade`, { valueAsNumber: true, })} />
+                                    <Button className="w-full xs:w-auto xs:text-xs" type="button" onClick={() => remove(index)}>Remover</Button>
                                     <hr className="border-gray-100 border-1 w-full xs:hidden" />
                                 </div>
                                 ))}
@@ -270,7 +273,6 @@ export const CardOrder = () => {
                             <Button className="w-full xs:w-auto" variant={"outline"} type="submit">
                                 Criar Pedido
                             </Button>
-
                         </form>
                    </Form>
                </section>

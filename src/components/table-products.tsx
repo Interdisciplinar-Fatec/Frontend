@@ -10,7 +10,6 @@ import {
 import type { getProductType } from "@/http/types/get-product-type"
 
 export const TableProducts = ({data}: {data: getProductType | undefined}) => {
-
     return (
         <div>
             <h2>Produtos Cadastrados: </h2>

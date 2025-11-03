@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/table"
 import { Fragment, useState } from "react"
 
-
 export const TableUserOrders = ({data}: {data: getOrderUserType}) => {
     const [expandRow, setExpandRow] = useState<string | null>(null)
     const handleToggleRow = (id: string) => {
