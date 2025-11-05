@@ -9,6 +9,11 @@ export const useGetOrders = () => {
             const response = await fetch(`${API_URL}/admin/orders`, {
                 credentials: 'include'
             })
+
+            if (!response.ok) {
+                throw new Error(`Erro ao atualizar status: ${response.status}`)
+            }
+
             const data: orderType[] = await response.json()
             return data;
         },

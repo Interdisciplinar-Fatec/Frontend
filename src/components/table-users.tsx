@@ -38,7 +38,7 @@ export const TableUsers = ({data}: {data: getUserType | undefined}) => {
                         data?.map(cell => {
                             const date = dayjs(cell.crated_at).format("DD/MM/YYYY")
                             return (
-                                <TableRow key={cell.id} onClick={() => handleToggleRow(cell.id)}>
+                                <TableRow className="cursor-pointer" key={cell.id} onClick={() => handleToggleRow(cell.id)}>
                                     <TableCell>{cell.name}</TableCell>
                                     <TableCell>{cell.email}</TableCell>
                                     <TableCell>{date}</TableCell>

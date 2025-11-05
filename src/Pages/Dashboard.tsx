@@ -1,7 +1,7 @@
 import { SideBar } from "@/components/sidebar"
 import { useAuth } from "@/http/useAuth"
 import { Navigate } from "react-router-dom"
-import {PanelLeftOpen} from "lucide-react"
+import {BoxIcon, FileSpreadsheet, PanelLeftOpen, UserRound} from "lucide-react"
 import {PanelLeftClose} from "lucide-react"
 import { useState } from "react"
 import { CardUser } from "@/components/cardUser"
@@ -30,9 +30,9 @@ export  function DashboardPage(){
             p-6 grid lg:grid-cols-5 lg:grid-rows-1
             grid-cols-1 grid-rows-8             
         `}>
-            <section className={`${toggle && "flex flex-row-reverse row-span-8"} gap-2 w-full h-full 
+            <section className={`${toggle && "flex flex-col-reverse row-span-8"} gap-2 w-full h-full 
                 lg:col-span-1 lg:row-span-1
-                row-span-1 col-span-1      
+                row-span-1 col-span-1 
             `}>
                 <SideBar 
                     className={`hidden lg:flex ${toggle ? "flex" : "hidden"}`} 
@@ -54,7 +54,24 @@ export  function DashboardPage(){
                 row-span-7 col-span-1 
             `}>
                  {/* place-items-stretch */}
-
+            
+                <div className={`${toggle ? "hidden" : "flex"} flex gap-4 flex-col sm:flex-row items-center justify-center w-full`}>
+                    <div className="w-full sm:max-w-40 bg-white flex flex-col items-center xxs:grid grid-cols-2 grid-rows-2 rounded-lg p-4">
+                        <UserRound className="row-span-1 col-span-1"/>
+                        <h2 className="hidden xxs:block row-span-1 col-span-1 text-xs xs:text-sm text-start ">Clientes</h2>
+                        <h2 className="row-span-1 col-span-2 text-xs xs:text-sm">{30}</h2>
+                    </div>
+                    <div className="w-full sm:max-w-40  bg-white flex flex-col items-center xxs:grid grid-cols-2 grid-rows-2 rounded-lg p-4">
+                        <BoxIcon className="row-span-1 col-span-1"/>
+                        <h2 className="hidden xxs:block row-span-1 col-span-1 text-xs xs:text-sm text-start ">Produtos</h2>
+                        <h2 className="row-span-1 col-span-2 text-xs xs:text-sm">{90}</h2>
+                    </div>
+                    <div className="w-full sm:max-w-40  bg-white flex flex-col items-center xxs:grid grid-cols-2 grid-rows-2 rounded-lg p-4">
+                        <FileSpreadsheet className="row-span-1 col-span-1"/>
+                        <h2 className="hidden xxs:block row-span-1 col-span-1 text-xs xs:text-sm text-start ">Pedidos</h2>
+                        <h2 className="row-span-1 col-span-2 text-xs xs:text-sm">{10}</h2>
+                    </div>
+                </div>
                 { cardUser && !toggle  && <CardUser /> }
                 { cardProduct && !toggle  && <CardProduct /> }
                 { cardOrder && !toggle && <CardOrder /> }

@@ -21,6 +21,11 @@ export const usePostOrder = () => {
                 body: JSON.stringify(data),
                 credentials: "include"
             })
+
+            if (!response.ok) {
+                throw new Error(`Erro ao atualizar status: ${response.status}`)
+            }
+
             const result: Result = await response.json()
             return result;
         },

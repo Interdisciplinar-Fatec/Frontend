@@ -8,7 +8,7 @@ export const useLoginAdmin = () => {
     const navigate = useNavigate()
     return useMutation({
         mutationFn: async (data: LoginType) => {
-            const result = await fetch(`${API_URL}/login`, {
+            const response = await fetch(`${API_URL}/login`, {
                 method: 'POST',
                 headers: {
                     'Content-type': "application/json"
@@ -16,8 +16,13 @@ export const useLoginAdmin = () => {
                 body: JSON.stringify(data),
                 credentials: 'include'
             })
-            const response:Promise<LoginResponseType> = await result.json()
-            return response
+
+            if (!response.ok) {
+                throw new Error(`Erro ao atualizar status: ${response.status}`)
+            }
+
+            const result:Promise<LoginResponseType> = await response.json()
+            return result
         },
         onSuccess: () => {
             navigate("/dashboard")

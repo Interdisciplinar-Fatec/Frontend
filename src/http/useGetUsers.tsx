@@ -9,6 +9,11 @@ export const useGetUsers = () => {
             const response = await fetch(`${API_URL}/admin/users`, {
                 credentials: 'include'
             })
+
+            if (!response.ok) {
+                throw new Error(`Erro ao atualizar status: ${response.status}`)
+            }
+
             const data: getUserType = await response.json()
             return data;
         }

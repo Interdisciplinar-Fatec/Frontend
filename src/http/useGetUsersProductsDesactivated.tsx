@@ -2,18 +2,13 @@ import { useQuery } from "@tanstack/react-query"
 import { type getProductType } from "./types/get-product-type"
 import { API_URL } from "./api"
 
-export const useGetProducts = () => {
+export const useGetProductsDesactivated = () => {
     return useQuery({
-        queryKey: ['get-products'],
+        queryKey: ['get-products-desactivated'],
         queryFn: async (): Promise<getProductType> => {
-            const response = await fetch(`${API_URL}/admin/products`, {
+            const response = await fetch(`${API_URL}/admin/products/desactivated`, {
                 credentials: 'include'
             })
-
-            if (!response.ok) {
-                throw new Error(`Erro ao atualizar status: ${response.status}`)
-            }
-
             const data: getProductType = await response.json()
             return data;
         }
