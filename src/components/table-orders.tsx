@@ -9,8 +9,16 @@ import {
     TableCell
 } from "@/components/ui/table"
 import type { orderType } from "@/http/types/response-orders-type"
+import { useUpdateOrderStatus } from "@/http/useUpdateOrderStatus"
 
 export const TableOrders = ({data}: {data: orderType[]}) => {
+    const statuses = ["pendente", "em progresso", "finalizado"]
+     const { mutate: updateStatus, isPending } = useUpdateOrderStatus()
+
+    const handleChange = (pedidoId: string, userId: string, newStatus: string) => {
+        updateStatus({ pedidoId, userId, status: newStatus })
+    }
+
     return (
         <Table className="text-black">
             <TableHeader>
@@ -37,7 +45,24 @@ export const TableOrders = ({data}: {data: orderType[]}) => {
                             <TableRow key={p.id} >
                                 <TableCell>{p.id}</TableCell>
                                 <TableCell>{p.id_user}</TableCell>
-                                <TableCell>{p.status}</TableCell>
+                                <TableCell>{p.id_user}</TableCell>
+                                <TableCell>
+                                    <select value={p.status ?? ""}
+                                        className="border border-gray-300 rounded px-2 py-1"
+                                        disabled={isPending}
+                                        onChange={(e) => handleChange(p.id, p.id_user, e.target.value)}
+                                    >
+                                        <option value={p.status ?? ""}>{p.status ?? "Selecione"}</option>
+                                        {statuses
+                                            .filter((s) => s !== p.status)
+                                            .map((s) => (
+                                            <option key={s} value={s}>
+                                                {s}
+                                            </option>
+                                            ))}
+                                        </select>
+
+                                </TableCell>
                                 <TableCell>{dayjs(p.data_pedido).format("DD/MM/YYYY")}</TableCell>
                                 <TableCell>{p.valor_total}</TableCell>
                         </TableRow> 

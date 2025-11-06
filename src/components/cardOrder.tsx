@@ -18,13 +18,14 @@ import z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Input } from "./ui/input"
 import { Button } from "./ui/button"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { TableUserOrders } from "./table-UserOrders"
 import { TableOrders } from "./table-orders"
 import { useGetOrdersUser } from "@/http/useGetOrdersUser"
 import { useGetOrders } from "@/http/useGetOrderId"
 import { usePostOrder } from "@/http/usePostOrder"
 import { Label } from "@radix-ui/react-label"
+import { RefreshCw } from "lucide-react"
 
 const formSearchSchema = z.object({
     id: z.uuid({error: "Insira um ID válido"})
@@ -46,12 +47,13 @@ const formOrderSchema =  z.object({
 })
 
 export const CardOrder = () => {
-    const [orderId, setOrderId] = useState<string | undefined>()
+    const [userId, setuserId] = useState<string | undefined>()
 
     const {mutateAsync: createOrder} = usePostOrder()
 
     const {data: dataOrders} = useGetOrders();
-    const {data: dataOrder} = useGetOrdersUser(orderId);
+          console.log("onSucess: "+userId)
+    const {data: dataOrder, isError: isUserError, error: userError} = useGetOrdersUser(userId);
 
     const formSearch = useForm<z.infer<typeof formSearchSchema>>({
         resolver: zodResolver(formSearchSchema),
@@ -84,8 +86,22 @@ export const CardOrder = () => {
     })
 
     const handleSearchForm = async (values: z.infer<typeof formSearchSchema>) => {
-        setOrderId(values.id)
-        formSearch.reset()
+        try {
+            formSearch.reset()
+            setuserId(values.id.trim())
+            formSearch.clearErrors() 
+
+        } catch (err) {
+            formSearch.setError("id", {
+                type: "manual",
+                message: "Erro ao buscar pedidos. Tente novamente.",
+            })
+            console.error(err)
+        }
+    }
+
+     const handleFormRefetch = () => {
+        setuserId(undefined)
     }
 
     const handleOrderForm = async (values: z.infer<typeof formOrderSchema>) => {
@@ -97,6 +113,31 @@ export const CardOrder = () => {
         }
     }
 
+
+    useEffect(() => {
+        if (dataOrder) {
+            console.log(dataOrder)
+        }
+
+        if(dataOrder === null) {
+            formSearch.setError("id", {
+                type: "manual",    
+                message: "Usuário não encontrado"
+            })
+            setuserId(undefined)
+        }
+
+        if(userError) {
+            formSearch.setError("id", {
+                type: "manual",
+                message: "Erro ao buscar pedidos do usuário"
+            })
+            setuserId(undefined)
+            console.error(userError)
+        }
+
+    }, [dataOrder, isUserError, userError, formSearch])
+
     return (
         <Card className={`col-span-2 flex-1 `}>
             <CardHeader>
@@ -104,7 +145,8 @@ export const CardOrder = () => {
                 <CardDescription>Gerenciamento de Pedidos</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-                <section className="flex flex-col space-y-5">
+                <section className="flex flex-col space-y-5 relative">
+                    <button onClick={() => handleFormRefetch()} className="absolute top-[-20px] right-1"><RefreshCw className="w-5 h-5"/></button>
                     <Form {...formSearch}>
                         <form onSubmit={formSearch.handleSubmit(handleSearchForm)} className="flex gap-2
                             xs:flex-row xs:items-end
@@ -117,7 +159,11 @@ export const CardOrder = () => {
                                      <FormItem className="flex-1">
                                         <FormLabel></FormLabel>
                                         <FormControl>
-                                            <Input type="text" placeholder="Digite o id de um usuario para buscar seus pedidos ..." {...field}/>
+                                            <Input type="text" placeholder="Digite o id de um usuario para buscar seus pedidos ..." {...field} 
+                                                onChange={(e) => {
+                                                    field.onChange(e.target.value.trimStart())
+                                                }}  
+                                            />
                                         </FormControl>
                                          <FormMessage />
                                      </FormItem>
@@ -127,15 +173,13 @@ export const CardOrder = () => {
                         </form>
                     </Form>
                    {
-                    dataOrder && (
+                    dataOrder ? (
                         <TableUserOrders data={dataOrder}></TableUserOrders>
+                    ) : (
+                        <TableOrders data={dataOrders ?? []}></TableOrders>
                     )
                    }
                 </section>
-                <hr />
-                    <h2>Listagem dos Pedidos: </h2>
-                    <TableOrders data={dataOrders ?? []}></TableOrders>
-                <hr />
                <section className="p-2">
                     <h2 className="text-lg">Criar de pedido</h2>
                     <hr/>

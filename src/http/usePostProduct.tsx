@@ -17,6 +17,11 @@ export const usePostProduct = () => {
                 body: JSON.stringify(data),
                 credentials: "include"
             })
+
+            if (!response.ok) {
+                throw new Error(`Erro ao atualizar status: ${response.status}`)
+            }
+
             const result:responseProductType = await response.json()
             return result;
         },

@@ -6,10 +6,15 @@ export const useGetOrder = ()=> {
     return useQuery({
         queryKey: ['get-user-order'],
         queryFn: async (): Promise<getOrderUserType> => {
-            const result = await fetch(`${API_URL}/order`, {
+            const response = await fetch(`${API_URL}/order`, {
                 credentials: 'include'
             })
-            const data: Promise<getOrderUserType>= result.json()
+
+             if (!response.ok) {
+                throw new Error(`Erro ao atualizar status: ${response.status}`)
+            }
+
+            const data: Promise<getOrderUserType>= response.json()
             return data;
         }
     })
