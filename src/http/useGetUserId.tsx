@@ -7,7 +7,7 @@ export const useGetUserId = (id: string | undefined) => {
         queryKey: ['get-user-id', id],
         queryFn: async (): Promise<userFullType | null> => {
             const response = await fetch(`${API_URL}/admin/user/${id}`, {
-                credentials: 'include'
+                credentials: 'include',
             })
 
             if (response.status === 404) return null
