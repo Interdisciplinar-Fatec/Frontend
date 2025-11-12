@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query"
-import { API_URL } from "./api"
+import { API_URL } from "././api"
 import { useQueryClient } from "@tanstack/react-query"
 
 export const useDesactiveProdcuts = () => {
