@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://api-eletroconsertos.koyeb.app/:path*"
+      "destination": "https://surprising-zulema-interdiciplinar-fatec-fc7cbde3.koyeb.app/:path*"
     }
   ]
 }
