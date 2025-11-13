@@ -11,6 +11,7 @@ export const useLogoutAdmin = () => {
     return useMutation({
         mutationKey: ['admin-logout'],
         mutationFn: async () => {
+
             const response = await authFetch(`${API_URL}/admin/logout`, {
                 method: 'POST',
             })
@@ -19,14 +20,15 @@ export const useLogoutAdmin = () => {
                 throw new Error(`Erro ao atualizar status: ${response.status}`)
             }
 
-            const data: {message: string}  = await response.json()
-            return data;
-        },
-        onSuccess: () => {
+            
             if (localStorage.getItem("token")) {
                 localStorage.removeItem("token")
             }
 
+            const data: {message: string}  = await response.json()
+            return data;
+        },
+        onSuccess: () => {
             QueryClient.invalidateQueries({queryKey: ['auth-admin']})
             navigate("/")
         }

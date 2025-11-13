@@ -16,9 +16,6 @@ export const usePostOrder = () => {
         mutationFn: async (data: PostOrderType) => {
             const response = await authFetch(`${API_URL}/admin/order`, {
                 method: "POST",
-                headers: {
-                    "Content-type": "application/json"
-                },
                 body: JSON.stringify(data),
             })
 

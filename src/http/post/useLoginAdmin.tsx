@@ -4,6 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "../api";
 import { authFetch } from "../authFetch";
+import { CheckCookies } from "@/utils/useCheckCookies";
 
 export const useLoginAdmin = () => {
     const navigate = useNavigate()
@@ -11,9 +12,6 @@ export const useLoginAdmin = () => {
         mutationFn: async (data: LoginType) => {
             const response = await authFetch(`${API_URL}/login`, {
                 method: 'POST',
-                headers: {
-                    'Content-type': "application/json"
-                },
                 body: JSON.stringify(data),
             })
 
@@ -25,7 +23,8 @@ export const useLoginAdmin = () => {
             return result
         },
         onSuccess: (data) => {
-            if(data.token){
+            const enabled = CheckCookies()
+            if(!enabled && data.token){
                 localStorage.setItem("token", data.token)
             }
             navigate("/dashboard")
