@@ -1,13 +1,22 @@
 import { useMutation } from "@tanstack/react-query"
-import { API_URL } from "./api"
+import { API_URL } from "../api"
+import { useNavigate } from "react-router-dom"
+import { authFetch } from "../authFetch"
+
 
 export const useLogoutUser = () => {
+    const navigate = useNavigate()
+
     return useMutation({
         mutationKey: ['user-logout'],
         mutationFn: async () => {
-            const response = await fetch(`${API_URL}/user/logout`, {
+
+            if (localStorage.getItem("userId")) {
+                localStorage.removeItem("userId")
+            }
+
+            const response = await authFetch(`${API_URL}/user/logout`, {
                 method: 'POST',
-                credentials: 'include'
             })
 
             if (!response.ok) {
@@ -17,5 +26,8 @@ export const useLogoutUser = () => {
             const data: {message: string}  = await response.json()
             return data;
         },
+        onSuccess: () => {
+            navigate("/", {replace: true})
+        }
     })
 }

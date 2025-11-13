@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import type { PostOrderType } from "./types/post-order-type"
-import { API_URL } from "./api"
+import type { PostOrderType } from "@/http/types/post-order-type"
+import { API_URL } from "@/http/api"
+import { authFetch } from "../authFetch"
 
 export const usePostOrder = () => {
     const queryCLient = useQueryClient()
@@ -13,13 +14,12 @@ export const usePostOrder = () => {
     return useMutation({
         mutationKey: ['post-produt'],
         mutationFn: async (data: PostOrderType) => {
-            const response = await fetch(`${API_URL}/admin/order`, {
+            const response = await authFetch(`${API_URL}/admin/order`, {
                 method: "POST",
                 headers: {
                     "Content-type": "application/json"
                 },
                 body: JSON.stringify(data),
-                credentials: "include"
             })
 
             if (!response.ok) {

@@ -4,10 +4,10 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { useForm } from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod"
 import { z } from "zod"
-import { getOrderUser } from "@/http/useGetOrderUser";
+import { getOrderUser } from "@/http/get/useGetOrderUser";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { useLoginAdmin } from "@/http/useLoginAdmin";
+import { useLoginAdmin } from "@/http/post/useLoginAdmin";
 
 const formSchema = z.object({
     CPF: z.string().min(11, "CPF deve ter no mínimo 11 caracteres"),
@@ -60,7 +60,12 @@ export const FormOrder = () => {
     return (
         <div className="flex gap-4">
             <Form {...form}>
-                <form onSubmit={form.handleSubmit(handleForm)} className="flex items-end flex-col
+                <form onSubmit={
+                    (event) => {
+                        event.preventDefault();
+                        form.handleSubmit(handleForm)(event);
+                    }
+                } className="flex items-end flex-col
                     sm:gap-2 gap-4 sm:flex-row
                 ">
                     <FormField

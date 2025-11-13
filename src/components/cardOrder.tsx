@@ -21,9 +21,9 @@ import { Button } from "./ui/button"
 import { useEffect, useState } from "react"
 import { TableUserOrders } from "./table-UserOrders"
 import { TableOrders } from "./table-orders"
-import { useGetOrdersUser } from "@/http/useGetOrdersUser"
-import { useGetOrders } from "@/http/useGetOrderId"
-import { usePostOrder } from "@/http/usePostOrder"
+import { useGetOrdersUser } from "@/http/get/useGetOrdersUser"
+import { useGetOrders } from "@/http/get/useGetOrderId"
+import { usePostOrder } from "@/http/post/usePostOrder"
 import { Label } from "@radix-ui/react-label"
 import { RefreshCw } from "lucide-react"
 
@@ -174,7 +174,7 @@ export const CardOrder = () => {
                     </Form>
                    {
                     dataOrder ? (
-                        <TableUserOrders data={dataOrder}></TableUserOrders>
+                        <TableUserOrders data={dataOrder} admin={true}></TableUserOrders>
                     ) : (
                         <TableOrders data={dataOrders ?? []}></TableOrders>
                     )

@@ -19,8 +19,8 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import type { getProductType } from "@/http/types/get-product-type"
-import { useDesactiveProdcuts } from "@/http/useDesactiveProduct"
-import { useReactiveProdcuts } from "@/http/useReactiveProduct"
+import { useDesactiveProdcuts } from "@/http/patch/useDesactiveProduct"
+import { useReactiveProdcuts } from "@/http/patch/useReactiveProduct"
 import { DatabaseBackup, Trash } from "lucide-react"
 import { Button } from "./ui/button"
 

@@ -1,14 +1,14 @@
 import { useMutation } from "@tanstack/react-query"
-import { API_URL } from "././api"
+import { API_URL } from "../api"
 import { useQueryClient } from "@tanstack/react-query"
+import { authFetch } from "../authFetch"
 
-export const useDesactiveProdcuts = () => {
+export const useReactiveProdcuts = () => {
     const queryClient = useQueryClient()
     return useMutation({
         mutationFn: async (id: string) => {
-            const response = await fetch(`${API_URL}/admin/product/desactivate/${id}`, {
+            const response = await authFetch(`${API_URL}/admin/product/reactivate/${id}`, {
                 method: "PATCH",
-                credentials: "include"
             })
 
             if(response.status === 404) {

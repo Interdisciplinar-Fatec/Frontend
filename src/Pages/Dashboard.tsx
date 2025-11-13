@@ -1,5 +1,5 @@
 import { SideBar } from "@/components/sidebar"
-import { useAuth } from "@/http/useAuth"
+import { useAuth } from "@/http/get/useAuth"
 import { Navigate } from "react-router-dom"
 import {BoxIcon, FileSpreadsheet, PanelLeftOpen, UserRound} from "lucide-react"
 import {PanelLeftClose} from "lucide-react"

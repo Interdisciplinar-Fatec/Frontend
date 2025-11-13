@@ -10,9 +10,9 @@ import {
     TableCell
 } from "@/components/ui/table"
 import { Fragment, useState } from "react"
-import { useUpdateOrderStatus } from "@/http/useUpdateOrderStatus"
+import { useUpdateOrderStatus } from "@/http/patch/useUpdateOrderStatus"
 
-export const TableUserOrders = ({data}: {data: getOrderUserType}) => {
+export const TableUserOrders = ({data, admin}: {data: getOrderUserType, admin: boolean}, ) => {
     const statuses = ["Pendente", "Em Progresso", "Finalizado"]
     const [expandRow, setExpandRow] = useState<string | null>(null)
     const { mutate: updateStatus, isPending } = useUpdateOrderStatus()
@@ -21,7 +21,7 @@ export const TableUserOrders = ({data}: {data: getOrderUserType}) => {
         setExpandRow(expandRow === id ? null : id)
     }
 
-     const handleChange = (pedidoId: string, userId: string, newStatus: string) => {
+    const handleChange = (pedidoId: string, userId: string, newStatus: string) => {
         updateStatus({ pedidoId, userId, status: newStatus })
     }
 
@@ -50,20 +50,27 @@ export const TableUserOrders = ({data}: {data: getOrderUserType}) => {
                             <Fragment key={p.PedidoId}>
                                     <TableRow key={p.PedidoId} onClick={() => handleToggleRow(p.PedidoId)} className={`cursor-pointer ${expandRow === p.PedidoId ? "bg-gray-100" : "bg-transparent"}`}>
                                         <TableCell className="flex gap-1">
-                                            <select value={p.Status ?? ""}
-                                                className="border border-gray-300 rounded px-2 py-1"
-                                                disabled={isPending}
-                                                onChange={(e) => handleChange(p.PedidoId, data.user.id, e.target.value)}
-                                            >
-                                                <option value={p.Status ?? ""}>{p.Status ?? "Selecione"}</option>
-                                                {statuses
-                                                    .filter((s) => s !== p.Status) // remove o status atual
-                                                    .map((s) => (
-                                                    <option key={s} value={s}>
-                                                        {s}
-                                                    </option>
-                                                    ))}
-                                            </select>
+                                           {
+                                            admin ? (
+                                                 <select value={p.Status ?? ""}
+                                                    className="border border-gray-300 rounded px-2 py-1"
+                                                    disabled={isPending}
+                                                    onChange={(e) => handleChange(p.PedidoId, data.user.id, e.target.value)}
+                                                >
+                                                    <option value={p.Status ?? ""}>{p.Status ?? "Selecione"}</option>
+                                                    {statuses
+                                                        .filter((s) => s !== p.Status) // remove o status atual
+                                                        .map((s) => (
+                                                        <option key={s} value={s}>
+                                                            {s}
+                                                        </option>
+                                                        ))}
+                                                </select>
+
+                                            ) : (
+                                                <h2>{p.Status}</h2>
+                                            )
+                                           }
                                         </TableCell>
                                         <TableCell>{dayjs(p.DataPedido).format("DD/MM/YYYY")}</TableCell>
                                         <TableCell>{ p.Produtos.length}</TableCell>
