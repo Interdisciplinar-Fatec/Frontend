@@ -31,6 +31,7 @@ export const usePostOrder = () => {
         },
         onSuccess: () => {
             queryCLient.invalidateQueries({queryKey: ['get-orders'],})
+            queryCLient.invalidateQueries({ queryKey: ['get-users'],})
         }
     })
 }
