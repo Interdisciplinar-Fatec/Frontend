@@ -20,12 +20,12 @@ import { Input } from "./ui/input"
 import { Button } from "./ui/button"
 import { useEffect, useState } from "react"
 import { TableProducts } from "./table-products"
-import { useGetProducts } from "@/http/useGetUsersProducts"
-import { useGetProductName } from "@/http/useGetProductName"
-import { usePostProduct } from "@/http/usePostProduct"
+import { useGetProducts } from "@/http/get/useGetUsersProducts"
+import { useGetProductName } from "@/http/get/useGetProductName"
+import { usePostProduct } from "@/http/post/usePostProduct"
 import type { getProductType } from "@/http/types/get-product-type"
 import { ToggleLeft, ToggleRight } from "lucide-react"
-import { useGetProductsDesactivated } from "@/http/useGetUsersProductsDesactivated"
+import { useGetProductsDesactivated } from "@/http/get/useGetUsersProductsDesactivated"
 
 const formSearchSchema = z.object({
     nome: z.string()

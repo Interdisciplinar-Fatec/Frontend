@@ -1,14 +1,13 @@
 import { useQuery } from "@tanstack/react-query"
-import type { userFullType } from "./types/get-user-full-data-type"
-import { API_URL } from "./api"
+import type { userFullType } from "../types/get-user-full-data-type"
+import { API_URL } from "../api"
+import { authFetch } from "../authFetch"
 
 export const useGetUserId = (id: string | undefined) => {
     return useQuery<userFullType | null>({
         queryKey: ['get-user-id', id],
         queryFn: async (): Promise<userFullType | null> => {
-            const response = await fetch(`${API_URL}/admin/user/${id}`, {
-                credentials: 'include',
-            })
+            const response = await authFetch(`${API_URL}/admin/user/${id}`, {})
 
             if (response.status === 404) return null
             if (!response.ok) {

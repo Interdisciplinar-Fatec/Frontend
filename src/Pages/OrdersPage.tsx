@@ -1,5 +1,5 @@
 import { TableUserOrders } from "@/components/table-UserOrders"
-import { useGetOrder } from "@/http/useGetOrder"
+import { useGetOrder } from "@/http/get/useGetOrder"
 import { type getOrderUserType } from "@/http/types/get-orderUser-type"
 import { ArrowLeft } from "lucide-react"
 import { 
@@ -9,7 +9,7 @@ import {
     CardDescription,
     CardHeader,
  } from "@/components/ui/card"
-import { useLogoutUser } from "@/http/useLogout"
+import { useLogoutUser } from "@/http/post/useLogout"
 
 export function OrdersPage() {
     const {mutateAsync: logout} = useLogoutUser()
@@ -35,7 +35,7 @@ export function OrdersPage() {
                 </CardHeader>
                 <CardContent>
                     {
-                        data ? (<TableUserOrders data={data}/>) : (<h2>Não há pedidos</h2>)
+                        data ? (<TableUserOrders data={data} admin={false}/>) : (<h2>Não há pedidos</h2>)
                     }
                 </CardContent>
             </Card>

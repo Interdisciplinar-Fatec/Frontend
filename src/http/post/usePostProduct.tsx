@@ -1,7 +1,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import type { createProdcutType } from "./types/get-product-type"
-import type { responseProductType } from "./types/response-product-type"
-import { API_URL } from "./api"
+import type { createProdcutType } from "@/http/types/get-product-type"
+import type { responseProductType } from "@/http/types/response-product-type"
+import { API_URL } from "@/http/api"
+import { authFetch } from "../authFetch"
 
 export const usePostProduct = () => {
     const queryCLient = useQueryClient()
@@ -9,13 +10,12 @@ export const usePostProduct = () => {
     return useMutation({
         mutationKey: ['post-produt'],
         mutationFn: async (data: createProdcutType) => {
-            const response = await fetch(`${API_URL}/admin/product`, {
+            const response = await authFetch(`${API_URL}/admin/product`, {
                 method: "POST",
                 headers: {
                     "Content-type": "application/json"
                 },
                 body: JSON.stringify(data),
-                credentials: "include"
             })
 
             if (!response.ok) {

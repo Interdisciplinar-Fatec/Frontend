@@ -1,4 +1,4 @@
-import { useLogoutAdmin } from "@/http/useLogoutAdmin"
+import { useLogoutAdmin } from "@/http/post/useLogoutAdmin"
 import { Button } from "./ui/button"
 import { 
     Card,

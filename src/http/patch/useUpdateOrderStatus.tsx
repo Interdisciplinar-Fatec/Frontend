@@ -1,15 +1,15 @@
 // src/http/use-update-order-status.ts
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { API_URL } from "./api"
+import { API_URL } from "../api"
+import { authFetch } from "../authFetch"
 
 export const useUpdateOrderStatus = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
     mutationFn: async ({ pedidoId, status }: { pedidoId: string; userId: string; status: string}) => {
-      const res = await fetch(`${API_URL}/admin/order/${pedidoId}/${status}`, {
+      const res = await authFetch(`${API_URL}/admin/order/${pedidoId}/${status}`, {
         method: "PATCH",
-        credentials: "include",
       })
 
       if (!res.ok) {
