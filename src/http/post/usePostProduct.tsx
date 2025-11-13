@@ -12,9 +12,6 @@ export const usePostProduct = () => {
         mutationFn: async (data: createProdcutType) => {
             const response = await authFetch(`${API_URL}/admin/product`, {
                 method: "POST",
-                headers: {
-                    "Content-type": "application/json"
-                },
                 body: JSON.stringify(data),
             })
 

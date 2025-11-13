@@ -1,3 +1,4 @@
+import { CheckCookies } from "@/utils/useCheckCookies";
 import { API_URL } from "../api";
 import { authFetch } from "../authFetch";
 import type { getOrderUserType } from "../types/get-orderUser-type"
@@ -10,7 +11,8 @@ export const getOrderUser = async (CPF: string): Promise<getOrderUserType | { ad
         const result = await data.json()
 
        if(!result.userId){ throw new Error("UserId não encontrado")}
-        localStorage.setItem("userId", result.userId)
+        const enabled = CheckCookies()
+        if(!enabled ) localStorage.setItem("userId", result.userId)
         return result as getOrderUserType;
     }
 
