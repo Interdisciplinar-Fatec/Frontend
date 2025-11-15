@@ -3,25 +3,21 @@ import { Button } from "./ui/button"
 import { 
     Card,
     CardContent,
-    CardDescription,
     CardHeader,
     CardTitle
  } from "./ui/card"
-import { Checkbox } from "./ui/checkbox"
-import { Label } from "./ui/label"
+import { Apple, CalendarFold, Hash, User } from "lucide-react"
 
 interface SidebarProps {
     className: string,
-    setCardUser: (checked: boolean) => void,
-    setCardOrder: (checked: boolean) => void,
-    setCardProduct: (checked: boolean) => void
+    activeCard: "user" | "order" | "product" | null,
+    setActiveCard: (type: "user" | "order" | "product" | null) => void
 }
 
 export const SideBar = ({
     className,
-    setCardOrder,
-    setCardProduct,
-    setCardUser,
+    setActiveCard,
+    activeCard
 }: SidebarProps) => {
     const {mutateAsync: logout} = useLogoutAdmin()
 
@@ -31,29 +27,57 @@ export const SideBar = ({
     }
 
     return (
-        <Card className={`h-full w-full pt-10 ${className} space-y-4
-        `}>
-            <CardHeader>
-                <CardTitle>Dashboard</CardTitle>
-                <CardDescription>Painel adimistrativo</CardDescription>
-            </CardHeader>
-            <CardContent className="flex-1 flex flex-col gap-10">
-                <ul className="flex flex-col gap-2 h-ful">
-                    <li className="flex gap-1">
-                        <Checkbox onCheckedChange={setCardUser} id="Clientes"/>
-                        <Label htmlFor="Clientes">Clientes</Label>
+        <section className={`${className} bg-[#FFFFFF] h-full w-full p-4 grid-rows-8`}>
+            <div className=" row-span-1 flex items-start gap-1">
+                <div className="bg-[#E5EBFF]  mt-1 p-1">
+                    <Hash />
+                </div>
+                <div className="flex flex-col justify-center ">
+                    <h2 className="text-black ">JWT eletronica</h2>
+                    <h3 className="text-black text-xs">Painel administrativo</h3>
+                </div>
+            </div>
+
+            <div className="flex flex-col gap-4 row-span-3">
+                <hr />
+                <ul className="flex flex-col gap-2 cursor-pointer">
+                    <li className={`${activeCard === "user" ? "bg-[#D7DDEE]": "bg-transparent hover:bg-[#EEF1F5]"}`}>
+                        <button className="flex gap-3 w-full hover:p-1" onClick={() => setActiveCard(activeCard === "user" ? null : "user")}>
+                            <User />
+                            <h2>Clientes</h2>
+                        </button>
                     </li>
-                    <li className="flex gap-1">
-                        <Checkbox onCheckedChange={setCardProduct} id="Produtos"/>
-                        <Label htmlFor="Produtos">Produtos</Label>
+                    <li className={`${activeCard === "order" ? "bg-[#D7DDEE]": "bg-transparent hover:bg-[#EEF1F5]"}`}>
+                        <button className="flex gap-3 w-full hover:p-1"  onClick={() => setActiveCard(activeCard === "order" ? null : "order")}>
+                            <CalendarFold />
+                            <h2>Pedidos</h2>
+                        </button>
                     </li>
-                     <li className="flex gap-1">
-                        <Checkbox onCheckedChange={setCardOrder} id="Pedidos"/>
-                        <Label htmlFor="Pedidos">Pedidos</Label>
+                    <li className={`${activeCard === "product" ? "bg-[#D7DDEE]": "bg-transparent hover:bg-[#EEF1F5]"}`}>
+                        <button className="flex gap-3 w-full hover:p-1" onClick={() => setActiveCard(activeCard === "product" ? null : "product")}>
+                            <Apple />
+                            <h2>Produtos</h2>
+                        </button>
                     </li>
                 </ul>
-                <Button onClick={() => handlleLogoutAdmin()} className="mt-auto">Sair</Button>
-            </CardContent>
-        </Card>
+                <hr />
+            </div>
+
+            <div className="row-span-3 flex items-end">
+                <Card className="w-full gap-1">
+                    <CardHeader>
+                        <CardTitle className="text-sm text-green-400 w-11">
+                            <h2 className="bg-[#F6F7F9] rounded-lg  p-1">Novo</h2>
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        Não há avisos novos!
+                    </CardContent>
+                </Card>
+            </div>
+            <div className="row-span-1 flex items-end">
+                <Button className="w-full" onClick={() => handlleLogoutAdmin()} variant={"outline"}>Logout</Button>
+            </div>
+        </section>
     )
 }

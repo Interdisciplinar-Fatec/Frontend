@@ -48,13 +48,31 @@ export const FormOrder = () => {
                 }
             }
 
-            postLogin({
+            await postLogin({
                 CPF: values.CPF,
                 Senha: senha
             })
             
         } catch (error) {
-            console.error(error);
+            const loginError = error as {
+                status?: number,
+                message?: string
+            }
+
+            if(loginError.status === 401){
+                form.setError("Senha", {
+                    type: "manual",
+                    message: "Senha invalida!"
+                })
+            }
+          
+            if(loginError.status === 404){
+                form.setError("CPF", {
+                    type: "manual",
+                    message: "Email invalido!"
+                })
+            }
+            console.log("LoginError: ", loginError)
         }
     }
     return (
@@ -66,7 +84,7 @@ export const FormOrder = () => {
                         form.handleSubmit(handleForm)(event);
                     }
                 } className="flex items-end flex-col
-                    sm:gap-2 gap-4 sm:flex-row
+                    sm:gap-2 gap-4 sm:flex-row relative
                 ">
                     <FormField
                         control={form.control}
@@ -77,7 +95,7 @@ export const FormOrder = () => {
                                 <FormControl>
                                     <Input className="text-white sm:w-53 xss:w-45 w-30" placeholder="CPF" {...field} />
                                 </FormControl>
-                                <FormMessage />
+                                <FormMessage className="absolute bottom-[-25px]"/>
                             </FormItem>
                         )}
                     />
@@ -91,7 +109,7 @@ export const FormOrder = () => {
                                 <FormControl>
                                 <Input className="text-white sm:w-53 xss:w-45 w-30" placeholder="Senha" {...field} />
                                 </FormControl>
-                                <FormMessage />
+                                <FormMessage className="absolute bottom-[-25px]"/>
                             </FormItem>
                             )}
                         />

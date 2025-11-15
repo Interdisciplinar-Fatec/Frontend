@@ -1,8 +1,7 @@
 import { SideBar } from "@/components/sidebar"
 import { useAuth } from "@/http/get/useAuth"
 import { Navigate } from "react-router-dom"
-import {BoxIcon, FileSpreadsheet, PanelLeftOpen, UserRound} from "lucide-react"
-import {PanelLeftClose} from "lucide-react"
+import {Menu, MessageCircleWarning, PanelLeftOpen} from "lucide-react"
 import { useState } from "react"
 import { CardUser } from "@/components/cardUser"
 import { CardProduct } from "@/components/cardProducts"
@@ -12,9 +11,7 @@ export  function DashboardPage(){
     const {isLoading,data} = useAuth()
     const [toggle, setToggle] = useState<boolean>(false)
 
-    const [cardUser, setCardUser] = useState<boolean>(false)
-    const [cardOrder, setCardOrder] = useState<boolean>(false)
-    const [cardProduct, setCardProduct] = useState<boolean>(false)
+    const [activeCard, setActiveCard] = useState<"user" | "order" | "product" | null>(null)
 
     if(isLoading) { return <div className="text-white bg-[#171819]"><h2>Carregando...</h2></div>}
     if (!data?.ok || data?.status === false) {
@@ -26,56 +23,69 @@ export  function DashboardPage(){
     }
 
     return (
-        <main className={`h-screen bg-[#171819] items-center justify-between gap-14
-            p-6 grid lg:grid-cols-5 lg:grid-rows-1
-            grid-cols-1 grid-rows-8             
+        <main className={`h-screen bg-[#ffff] items-center justify-between 
+            grid lg:grid-cols-5 lg:grid-rows-1 lg:pt-3 lg:p-0
+            grid-cols-1 grid-rows-10 p-4
         `}>
-            <section className={`${toggle && "flex flex-col-reverse row-span-8"} gap-2 w-full h-full 
-                lg:col-span-1 lg:row-span-1
-                row-span-1 col-span-1 
+            <section className={`${toggle ? "flex flex-col-reverse row-span-10" : "hidden lg:flex"} gap-2 w-full h-full 
+                lg:col-span-1 lg:row-span-1 p-3
             `}>
                 <SideBar 
-                    className={`hidden lg:flex ${toggle ? "flex" : "hidden"}`} 
-                    setCardOrder={setCardOrder} 
-                    setCardUser={setCardUser} 
-                    setCardProduct={setCardProduct}
+                    className={`lg:grid ${toggle ? "grid" : "hidden"}`} 
+                    activeCard={activeCard}
+                    setActiveCard={setActiveCard}
                 />
-                {
-                    toggle ? (
-                        <PanelLeftClose className={`self-start lg:hidden text-white`} onClick={() => handdleToggle()} />
-                    ) : (
-                        <PanelLeftOpen className={`self-start lg:hidden text-white`} onClick={() => handdleToggle()} />
-                    )
-                }
+               <div className={`w-full flex justify-end p-1  ${toggle ? "flex" : "hidden"}`}>
+                    {
+                        toggle && (
+                            <PanelLeftOpen className={` lg:hidden text-black`} onClick={() => handdleToggle()} />
+                        ) 
+                    }
+               </div>
             </section>
             {/* flex flex-wrap */}
-            <section className={` ${toggle ? "hidden lg:col-span-2 lg:block" : "md:col-span-5 overflow-y-auto"} space-y-4 h-full  pr-6
-                lg:col-span-4 lg:row-span-1 
-                row-span-7 col-span-1 
+            <section className={` ${toggle ? "hidden lg:col-span-2" : "md:col-span-5 overflow-y-auto flex"} h-full
+                lg:col-span-4 lg:row-span-1 lg:flex
+                row-span-10 col-span-1 lg:rounded-tl-3xl rounded-lg flex-col
             `}>
-                 {/* place-items-stretch */}
-            
-                <div className={`${toggle ? "hidden" : "flex"} flex gap-4 flex-col sm:flex-row items-center justify-center w-full`}>
-                    <div className="w-full sm:max-w-40 bg-white flex flex-col items-center xxs:grid grid-cols-2 grid-rows-2 rounded-lg p-4">
-                        <UserRound className="row-span-1 col-span-1"/>
-                        <h2 className="hidden xxs:block row-span-1 col-span-1 text-xs xs:text-sm text-start ">Clientes</h2>
-                        <h2 className="row-span-1 col-span-2 text-xs xs:text-sm">{30}</h2>
+                <div className="bg-[#EEF1F5] min-h-20 lg:rounded-tl-3xl flex flex-col items-end">
+                    <div className="w-full flex justify-between p-3">
+                        <h2 className="">Dashboard</h2>
+                        {
+                            !toggle && (
+                                <Menu className={` lg:hidden text-black`} onClick={() => handdleToggle()} />
+                            ) 
+                        }
                     </div>
-                    <div className="w-full sm:max-w-40  bg-white flex flex-col items-center xxs:grid grid-cols-2 grid-rows-2 rounded-lg p-4">
-                        <BoxIcon className="row-span-1 col-span-1"/>
-                        <h2 className="hidden xxs:block row-span-1 col-span-1 text-xs xs:text-sm text-start ">Produtos</h2>
-                        <h2 className="row-span-1 col-span-2 text-xs xs:text-sm">{90}</h2>
-                    </div>
-                    <div className="w-full sm:max-w-40  bg-white flex flex-col items-center xxs:grid grid-cols-2 grid-rows-2 rounded-lg p-4">
-                        <FileSpreadsheet className="row-span-1 col-span-1"/>
-                        <h2 className="hidden xxs:block row-span-1 col-span-1 text-xs xs:text-sm text-start ">Pedidos</h2>
-                        <h2 className="row-span-1 col-span-2 text-xs xs:text-sm">{10}</h2>
-                    </div>
+                    <hr className="w-full border-2 border-[#FFFFFF]" />
                 </div>
-                { cardUser && !toggle  && <CardUser /> }
-                { cardProduct && !toggle  && <CardProduct /> }
-                { cardOrder && !toggle && <CardOrder /> }
 
+                {
+                    activeCard === null ? (
+                        <div className="bg-[#EEF1F5] flex-1 flex justify-center items-center">
+                            <div className="flex flex-col justify-center items-center border-2 border-gray-300 border-dashed p-2">
+                                <MessageCircleWarning className="text-[#6B8BFF]" />
+                                <h2 className="font-semibold">Nenhuma tabela selecionada!</h2>
+                                <h2 className="text-xs text-gray-700">Selecione uma tabela para começar os trabalhos</h2>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="bg-[#EEF1F5] grid grid-cols-2 grid-rows-10 flex-1 p-4 gap-2">
+                            <div className="col-span-2 row-span-6 rounded-lg border-2 border-[#FFFFFF]">
+                                {activeCard === "user" && !toggle && <CardUser />}
+                            </div>
+                            <div className="col-span-1 row-span-4 rounded-lg border-2 border-[#FFFFFF]">
+
+                            </div>
+                            <div className="col-span-1 row-span-4 rounded-lg border-2 border-[#FFFFFF]"
+                            ></div>
+                        </div> 
+                    )
+                }
+             
+                {/* {activeCard === "user" && !toggle && <CardUser />}
+                {activeCard === "product" && !toggle && <CardProduct />}
+                {activeCard === "order" && !toggle && <CardOrder />} */}
             </section>
         </main>
     )

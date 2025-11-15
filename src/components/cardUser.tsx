@@ -22,13 +22,17 @@ import { Button } from "./ui/button"
 import { useGetUsers } from "@/http/get/useGetUsers"
 import { useGetUserId } from "@/http/get/useGetUserId"
 import { useEffect, useState } from "react"
-import { RefreshCw } from "lucide-react"
+import { Funnel, RefreshCw } from "lucide-react"
+import { Popover, PopoverTrigger, PopoverContent } from "./ui/popover"
+import { ToggleGroup, ToggleGroupItem } from "./ui/toggle-group"
 
 const formSchema = z.object({
     id: z.uuid({error: "Insira um ID válido"})
 })
 
 export const CardUser = () => {
+    const [openFilter, setOpenFilter] = useState(false)
+    const [selectedFilter, setSelectedFilter] = useState("id")
     const [userId, setUserId] = useState<string | undefined>()
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [tableData, setTableData] = useState<any>([])
@@ -92,14 +96,51 @@ export const CardUser = () => {
 
 
     return (
-        <Card className={`col-span-2 flex-1`}>
+        <Card className={`col-span-2 flex-1 `}>
             <CardHeader>
                 <CardTitle>Clientes</CardTitle>
                 <CardDescription>Dados dos clientes</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
                 <section className="flex flex-col space-y-5 relative">
-                    <button onClick={() => handleFormRefetch()} className="absolute top-[-20px] right-1"><RefreshCw className="w-5 h-5"/></button>
+                    <Popover open={openFilter} onOpenChange={setOpenFilter}>
+                        <PopoverTrigger asChild>
+                            <button className="absolute top-[-20px] right-1">
+                                <Funnel className="w-5 h-5" />
+                            </button>
+                        </PopoverTrigger>
+
+                        <PopoverContent className= "w-30 lg:w-72 p-4 space-y-4"
+                            side={"right"}
+                            align="start"
+                            alignOffset={0}
+                            sideOffset={0}
+                        >
+                            <h4 className="text-sm font-semibold text-center">Filtros</h4>
+
+                            <ToggleGroup
+                                type="single"
+                                value={selectedFilter}
+                                onValueChange={(v) => v && setSelectedFilter(v)}
+                                className="flex flex-col lg:flex-row gap-2 w-full"
+                            >
+                                <ToggleGroupItem value="id">ID</ToggleGroupItem>
+                                <ToggleGroupItem value="nome">Nome</ToggleGroupItem>
+                                <ToggleGroupItem value="cpf">CPF</ToggleGroupItem>
+                                <ToggleGroupItem value="recentes">Recentes</ToggleGroupItem>
+                            </ToggleGroup>
+
+                            <Button
+                                className="w-full"
+                                variant="outline"
+                                onClick={() => setOpenFilter(false)}
+                            >
+                                Aplicar
+                            </Button>
+                        </PopoverContent>
+                    </Popover>
+
+                    <button onClick={() => handleFormRefetch()} className="absolute top-[-20px] right-7"><RefreshCw className="w-5 h-5"/></button>
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(handleForm)} className="flex relative
                             xs:flex-row xs:items-end

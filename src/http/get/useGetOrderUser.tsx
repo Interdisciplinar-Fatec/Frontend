@@ -20,6 +20,13 @@ export const getOrderUser = async (CPF: string): Promise<getOrderUserType | { ad
         const result = await data.json()
         return result as {adminCPF: boolean};
     }
+
+    if(data.status === 404) {
+        throw {
+            status: data.status,
+            message: `Erro ao validar CPF. Status ${data.status}`
+        }
+    }
  
     throw new Error("Erro inesperado")
 }
