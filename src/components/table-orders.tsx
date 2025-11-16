@@ -45,7 +45,6 @@ export const TableOrders = ({data}: {data: orderType[]}) => {
                             <TableRow key={p.id} >
                                 <TableCell>{p.id}</TableCell>
                                 <TableCell>{p.id_user}</TableCell>
-                                <TableCell>{p.id_user}</TableCell>
                                 <TableCell>
                                     <select value={p.status ?? ""}
                                         className="border border-gray-300 rounded px-2 py-1"
