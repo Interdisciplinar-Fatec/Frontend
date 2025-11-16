@@ -3,6 +3,10 @@
     {
       "source": "/api/:path*",
       "destination": "https://surprising-zulema-interdiciplinar-fatec-fc7cbde3.koyeb.app/:path*"
+    },
+     {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
