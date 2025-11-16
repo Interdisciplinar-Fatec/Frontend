@@ -3,9 +3,11 @@ import { useAuth } from "@/http/get/useAuth"
 import { Navigate } from "react-router-dom"
 import {Menu, MessageCircleWarning, PanelLeftOpen} from "lucide-react"
 import { useState } from "react"
-import { CardUser } from "@/components/cardUser"
-import { CardProduct } from "@/components/cardProducts"
-import { CardOrder } from "@/components/cardOrder"
+import { CardListProduct } from "@/components/cardListProducts"
+import { CardListOrder } from "@/components/cardListOrder"
+import { CardCreateProduct } from "@/components/cardCreateProducts"
+import { CardCreateOrder } from "@/components/cardCreateOrder"
+import { CardListUser } from "@/components/cardListUser"
 
 export  function DashboardPage(){
     const {isLoading,data} = useAuth()
@@ -59,7 +61,6 @@ export  function DashboardPage(){
                     </div>
                     <hr className="w-full border-2 border-[#FFFFFF]" />
                 </div>
-
                 {
                     activeCard === null ? (
                         <div className="bg-[#EEF1F5] flex-1 flex justify-center items-center">
@@ -70,22 +71,21 @@ export  function DashboardPage(){
                             </div>
                         </div>
                     ) : (
-                        <div className="bg-[#EEF1F5] grid grid-cols-2 grid-rows-10 flex-1 p-4 gap-2">
-                            <div className="col-span-2 row-span-6 rounded-lg border-2 border-[#FFFFFF]">
-                                {activeCard === "user" && !toggle && <CardUser />}
+                        <div className="bg-[#EEF1F5] flex flex-col flex-1 p-4 gap-2">
+                            <div className="flex-1 rounded-lg border-2 border-[#FFFFFF]">
+                                {activeCard === "user" && !toggle && <CardListUser />}
+                                {activeCard === "order" && !toggle && <CardListOrder />}
+                                {activeCard === "product" && !toggle && <CardListProduct />}
                             </div>
-                            <div className="col-span-1 row-span-4 rounded-lg border-2 border-[#FFFFFF]">
-
+                            
+      
+                            <div className="flex-1 rounded-lg border-2 border-[#FFFFFF]">
+                                {activeCard === "order" && !toggle && <CardCreateOrder />}
+                                {activeCard === "product" && !toggle && <CardCreateProduct />}
                             </div>
-                            <div className="col-span-1 row-span-4 rounded-lg border-2 border-[#FFFFFF]"
-                            ></div>
                         </div> 
                     )
                 }
-             
-                {/* {activeCard === "user" && !toggle && <CardUser />}
-                {activeCard === "product" && !toggle && <CardProduct />}
-                {activeCard === "order" && !toggle && <CardOrder />} */}
             </section>
         </main>
     )

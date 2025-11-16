@@ -18,18 +18,8 @@ import z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Input } from "./ui/input"
 import { Button } from "./ui/button"
-import { useEffect, useState } from "react"
-import { TableUserOrders } from "./table-UserOrders"
-import { TableOrders } from "./table-orders"
-import { useGetOrdersUser } from "@/http/get/useGetOrdersUser"
-import { useGetOrders } from "@/http/get/useGetOrderId"
 import { usePostOrder } from "@/http/post/usePostOrder"
 import { Label } from "@radix-ui/react-label"
-import { RefreshCw } from "lucide-react"
-
-const formSearchSchema = z.object({
-    id: z.uuid({error: "Insira um ID válido"})
-})
 
 const formOrderSchema =  z.object({
     CPF: z.string().min(11, {error : "Insira um CPF válido"}),
@@ -46,22 +36,8 @@ const formOrderSchema =  z.object({
     }))
 })
 
-export const CardOrder = () => {
-    const [userId, setuserId] = useState<string | undefined>()
-
+export const CardCreateOrder = () => {
     const {mutateAsync: createOrder} = usePostOrder()
-
-    const {data: dataOrders} = useGetOrders();
-          console.log("onSucess: "+userId)
-    const {data: dataOrder, isError: isUserError, error: userError} = useGetOrdersUser(userId);
-
-    const formSearch = useForm<z.infer<typeof formSearchSchema>>({
-        resolver: zodResolver(formSearchSchema),
-        defaultValues: {
-            id: ""
-        },
-    })
-
     const formOrders = useForm<z.infer<typeof formOrderSchema>>({
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         resolver: zodResolver(formOrderSchema) as any,
@@ -79,30 +55,10 @@ export const CardOrder = () => {
     })
 
     const {register} = formOrders
-
     const { fields, append, remove } = useFieldArray({
         control: formOrders.control,
         name: "items"
     })
-
-    const handleSearchForm = async (values: z.infer<typeof formSearchSchema>) => {
-        try {
-            formSearch.reset()
-            setuserId(values.id.trim())
-            formSearch.clearErrors() 
-
-        } catch (err) {
-            formSearch.setError("id", {
-                type: "manual",
-                message: "Erro ao buscar pedidos. Tente novamente.",
-            })
-            console.error(err)
-        }
-    }
-
-     const handleFormRefetch = () => {
-        setuserId(undefined)
-    }
 
     const handleOrderForm = async (values: z.infer<typeof formOrderSchema>) => {
         try {
@@ -113,85 +69,25 @@ export const CardOrder = () => {
         }
     }
 
-
-    useEffect(() => {
-        if (dataOrder) {
-            console.log(dataOrder)
-        }
-
-        if(dataOrder === null) {
-            formSearch.setError("id", {
-                type: "manual",    
-                message: "Usuário não encontrado"
-            })
-            setuserId(undefined)
-        }
-
-        if(userError) {
-            formSearch.setError("id", {
-                type: "manual",
-                message: "Erro ao buscar pedidos do usuário"
-            })
-            setuserId(undefined)
-            console.error(userError)
-        }
-
-    }, [dataOrder, isUserError, userError, formSearch])
-
     return (
-        <Card className={`col-span-2 flex-1 `}>
+        <Card className={`col-span-2 h-full`}>
             <CardHeader>
                 <CardTitle>Pedidos</CardTitle>
                 <CardDescription>Gerenciamento de Pedidos</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-                <section className="flex flex-col space-y-5 relative">
-                    <button onClick={() => handleFormRefetch()} className="absolute top-[-20px] right-1"><RefreshCw className="w-5 h-5"/></button>
-                    <Form {...formSearch}>
-                        <form onSubmit={formSearch.handleSubmit(handleSearchForm)} className="flex gap-2
-                            xs:flex-row xs:items-end
-                            flex-col items-center
-                        ">
-                            <FormField 
-                                name="id"
-                                control={formSearch.control}
-                                render={({field}) => (
-                                     <FormItem className="flex-1">
-                                        <FormLabel></FormLabel>
-                                        <FormControl>
-                                            <Input type="text" placeholder="Digite o id de um usuario para buscar seus pedidos ..." {...field} 
-                                                onChange={(e) => {
-                                                    field.onChange(e.target.value.trimStart())
-                                                }}  
-                                            />
-                                        </FormControl>
-                                         <FormMessage />
-                                     </FormItem>
-                            )}
-                            />
-                            <Button className="w-full xs:w-auto" type="submit" variant={"outline"}>Buscar</Button>
-                        </form>
-                    </Form>
-                   {
-                    dataOrder ? (
-                        <TableUserOrders data={dataOrder} admin={true}></TableUserOrders>
-                    ) : (
-                        <TableOrders data={dataOrders ?? []}></TableOrders>
-                    )
-                   }
-                </section>
-               <section className="p-2">
+               <section className="p-2 flex flex-col gap-2">
                     <h2 className="text-lg">Criar de pedido</h2>
                     <hr/>
                     <h3 className="text-sm mt-4">Dados do Cliente: </h3>
                    <Form {...formOrders}>
-                        <form className="space-y-1" onSubmit={formOrders.handleSubmit(handleOrderForm)}>
+                        <form className="space-y-3" onSubmit={formOrders.handleSubmit(handleOrderForm)}>
                             <FormField 
                                 name="name"
                                 control={formOrders.control}
                                 render={({field}) => (
                                     <FormItem>
-                                        <FormLabel></FormLabel>
+                                        <FormLabel>Nome:</FormLabel>
                                         <FormControl>
                                             <Input type="text" placeholder="Nome" {...field}/>
                                         </FormControl>
@@ -204,7 +100,7 @@ export const CardOrder = () => {
                                 control={formOrders.control}
                                 render={({field}) => (
                                     <FormItem>
-                                        <FormLabel></FormLabel>
+                                        <FormLabel>CPF:</FormLabel>
                                         <FormControl>
                                             <Input type="text" placeholder="CPF" {...field}/>
                                         </FormControl>
@@ -217,7 +113,7 @@ export const CardOrder = () => {
                                 control={formOrders.control}
                                 render={({field}) => (
                                     <FormItem>
-                                        <FormLabel></FormLabel>
+                                        <FormLabel>Data de nascimento:</FormLabel>
                                         <FormControl>
                                             <Input type="text" placeholder="Data de nascimento" {...field}/>
                                         </FormControl>
@@ -230,7 +126,7 @@ export const CardOrder = () => {
                                 control={formOrders.control}
                                 render={({field}) => (
                                     <FormItem>
-                                        <FormLabel></FormLabel>
+                                        <FormLabel>Email:</FormLabel>
                                         <FormControl>
                                             <Input type="text" placeholder="E-mail" {...field}/>
                                         </FormControl>
@@ -243,7 +139,7 @@ export const CardOrder = () => {
                                 control={formOrders.control}
                                 render={({field}) => (
                                     <FormItem>
-                                        <FormLabel></FormLabel>
+                                        <FormLabel>Endereço:</FormLabel>
                                         <FormControl>
                                             <Input type="text" placeholder="Endereço" {...field}/>
                                         </FormControl>
@@ -256,7 +152,7 @@ export const CardOrder = () => {
                                 control={formOrders.control}
                                 render={({field}) => (
                                     <FormItem>
-                                        <FormLabel></FormLabel>
+                                        <FormLabel>Telefone:</FormLabel>
                                         <FormControl>
                                             <Input type="text" placeholder="Telefone" {...field}/>
                                         </FormControl>
@@ -271,9 +167,9 @@ export const CardOrder = () => {
                                 control={formOrders.control}
                                 render={({field}) => (
                                     <FormItem>
-                                        <FormLabel></FormLabel>
+                                        <FormLabel>Descrição</FormLabel>
                                         <FormControl>
-                                            <Input type="text" placeholder="Descrição" {...field}/>
+                                            <Input type="text" placeholder="Descrição (opcional)" {...field}/>
                                         </FormControl>
                                          <FormMessage />
                                     </FormItem>
@@ -284,9 +180,14 @@ export const CardOrder = () => {
                                 control={formOrders.control}
                                 render={({field}) => (
                                     <FormItem>
-                                        <FormLabel></FormLabel>
+                                        <FormLabel>Orçamento:</FormLabel>
                                         <FormControl>
-                                            <Input type="text" placeholder="Orçamento" {...field} />
+                                            <Input type="number" placeholder="Orçamento" {...field} value={field.value === 0 ? "" : field.value}
+                                                onChange={(e) => {
+                                                    const value = e.target.value === "" ? 0 : parseFloat(e.target.value)
+                                                    field.onChange(value)
+                                                }}
+                                            />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>

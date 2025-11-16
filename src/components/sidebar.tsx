@@ -1,11 +1,5 @@
 import { useLogoutAdmin } from "@/http/post/useLogoutAdmin"
 import { Button } from "./ui/button"
-import { 
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle
- } from "./ui/card"
 import { Apple, CalendarFold, Hash, User } from "lucide-react"
 
 interface SidebarProps {
@@ -27,13 +21,13 @@ export const SideBar = ({
     }
 
     return (
-        <section className={`${className} bg-[#FFFFFF] h-full w-full p-4 grid-rows-8`}>
+        <section className={`${className} bg-[#FFFFFF] h-full w-full p-4 grid-rows-5`}>
             <div className=" row-span-1 flex items-start gap-1">
                 <div className="bg-[#E5EBFF]  mt-1 p-1">
                     <Hash />
                 </div>
                 <div className="flex flex-col justify-center ">
-                    <h2 className="text-black ">JWT eletronica</h2>
+                    <h2 className="text-black ">JWC eletrônica</h2>
                     <h3 className="text-black text-xs">Painel administrativo</h3>
                 </div>
             </div>
@@ -61,19 +55,6 @@ export const SideBar = ({
                     </li>
                 </ul>
                 <hr />
-            </div>
-
-            <div className="row-span-3 flex items-end">
-                <Card className="w-full gap-1">
-                    <CardHeader>
-                        <CardTitle className="text-sm text-green-400 w-11">
-                            <h2 className="bg-[#F6F7F9] rounded-lg  p-1">Novo</h2>
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        Não há avisos novos!
-                    </CardContent>
-                </Card>
             </div>
             <div className="row-span-1 flex items-end">
                 <Button className="w-full" onClick={() => handlleLogoutAdmin()} variant={"outline"}>Logout</Button>
