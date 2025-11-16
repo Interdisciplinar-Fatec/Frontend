@@ -16,10 +16,22 @@ export const useLoginAdmin = () => {
             })
 
             if (!response.ok) {
-                throw new Error(`Erro ao atualizar status: ${response.status}`)
+                let errorMessage = `Erro ao logar. status = ${response.status}`
+                try {
+                    const erroData = await response.json()
+                    errorMessage = erroData.message || errorMessage
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                } catch (e) {
+                   // Ignora se não conseguir ler o JSON.
+                }
+
+                throw {
+                    status: response.status,
+                    message: errorMessage
+                }
             }
 
-            const result:Promise<LoginResponseType> = await response.json()
+            const result:LoginResponseType = await response.json()
             return result
         },
         onSuccess: (data) => {
@@ -28,6 +40,6 @@ export const useLoginAdmin = () => {
                 localStorage.setItem("token", data.token)
             }
             navigate("/dashboard")
-        }
+        },
     })
 }

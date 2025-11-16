@@ -25,10 +25,13 @@ export const TableUserOrders = ({data, admin}: {data: getOrderUserType, admin: b
         updateStatus({ pedidoId, userId, status: newStatus })
     }
 
+    const cliente = data.user.name
+
     return (
         <Table className="text-black">
             <TableHeader>
                 <TableRow>
+                    <TableHead className="text-gray-400 font-bold">Cliente</TableHead>
                     <TableHead className="text-gray-400 font-bold">Status</TableHead>
                     <TableHead className="text-gray-400 font-bold">Data</TableHead>
                     <TableHead className="text-gray-400 font-bold">Quantidade</TableHead>
@@ -49,6 +52,7 @@ export const TableUserOrders = ({data, admin}: {data: getOrderUserType, admin: b
                         return (
                             <Fragment key={p.PedidoId}>
                                     <TableRow key={p.PedidoId} onClick={() => handleToggleRow(p.PedidoId)} className={`cursor-pointer ${expandRow === p.PedidoId ? "bg-gray-100" : "bg-transparent"}`}>
+                                        <TableCell>{cliente}</TableCell>
                                         <TableCell className="flex gap-1">
                                            {
                                             admin ? (
@@ -59,7 +63,7 @@ export const TableUserOrders = ({data, admin}: {data: getOrderUserType, admin: b
                                                 >
                                                     <option value={p.Status ?? ""}>{p.Status ?? "Selecione"}</option>
                                                     {statuses
-                                                        .filter((s) => s !== p.Status) // remove o status atual
+                                                        .filter((s) => s !== p.Status) 
                                                         .map((s) => (
                                                         <option key={s} value={s}>
                                                             {s}

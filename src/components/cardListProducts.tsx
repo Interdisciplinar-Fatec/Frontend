@@ -22,7 +22,6 @@ import { useEffect, useState } from "react"
 import { TableProducts } from "./table-products"
 import { useGetProducts } from "@/http/get/useGetUsersProducts"
 import { useGetProductName } from "@/http/get/useGetProductName"
-import { usePostProduct } from "@/http/post/usePostProduct"
 import type { getProductType } from "@/http/types/get-product-type"
 import { ToggleLeft, ToggleRight } from "lucide-react"
 import { useGetProductsDesactivated } from "@/http/get/useGetUsersProductsDesactivated"
@@ -31,19 +30,11 @@ const formSearchSchema = z.object({
     nome: z.string()
 })
 
-const formProductSchema = z.object({
-    nome: z.string().min(2, {error: "O nome deve ter no mínimo 2 caracteres"}),
-    marca: z.string().min(2, {error: "A marca deve ter no mínimo 2 caracteres"}),
-    preco: z.coerce.number().min(1, {error: "O preço não pode ser negativo"}),
-    descricao: z.string().optional()
-})
-
-export const CardProduct = () => {
+export const CardListProduct = () => {
     const [productName, setProductName] = useState<string | undefined>()
     const [tableData, setTableData] = useState<getProductType>([])
     const [switchBtn, setswitchBtn] = useState<boolean>(false)
 
-    const {mutateAsync: createProduct} = usePostProduct()
     const {data: dataProducts} = useGetProducts();
     const {data: dataProductsDesactivated} = useGetProductsDesactivated();
     const {data: dataProduct, refetch} = useGetProductName(productName);
@@ -67,17 +58,6 @@ export const CardProduct = () => {
         },
     })
 
-    const formProducts = useForm<z.infer<typeof formProductSchema>>({
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        resolver: zodResolver(formProductSchema) as any,
-        defaultValues: {
-            nome: "",
-            marca: "",
-            preco: 0,
-            descricao: ""
-        }
-    })
-
     const handleSearchForm = async (values: z.infer<typeof formSearchSchema>) => {
         setProductName(values.nome)
     }
@@ -99,21 +79,11 @@ export const CardProduct = () => {
         if(dataProduct) setTableData(dataProduct)
     }, [dataProduct])
 
-    const handleProductForm = async (values: z.infer<typeof formProductSchema>) => {
-        createProduct({
-            nome: values.nome,
-            marca: values.marca,
-            preco: values.preco,
-            descricao: values.descricao
-        })
-        formProducts.reset()
-    }
-
     return (
-        <Card className={`col-span-2 flex-1 `}>
+        <Card className={`col-span-2 h-full `}>
             <CardHeader>
                 <CardTitle>Produtos</CardTitle>
-                <CardDescription>Cadastro e consulta de Produtos</CardDescription>
+                <CardDescription>consulta de Produtos</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
                 <section className="flex flex-col space-y-5 relative">
@@ -160,68 +130,7 @@ export const CardProduct = () => {
                         )
                     }
                 </section>
-                    <TableProducts data={tableData} switchBtn={switchBtn}></TableProducts>
-                <hr className={` ${switchBtn && "border-red-500 border-dotted "} `} />
-               <section>
-                    <h2>Cadastro de Produto: </h2>
-                   <Form {...formProducts}>
-                        <form className="space-y-1" onSubmit={formProducts.handleSubmit(handleProductForm)}>
-                            <FormField 
-                                name="nome"
-                                control={formProducts.control}
-                                render={({field}) => (
-                                    <FormItem>
-                                        <FormLabel></FormLabel>
-                                        <FormControl>
-                                            <Input type="text" placeholder="Nome" {...field}/>
-                                        </FormControl>
-                                        <FormMessage></FormMessage>
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField 
-                                name="marca"
-                                control={formProducts.control}
-                                render={({field}) => (
-                                    <FormItem>
-                                        <FormLabel></FormLabel>
-                                        <FormControl>
-                                            <Input type="text" placeholder="Marca" {...field}/>
-                                        </FormControl>
-                                        <FormMessage></FormMessage>
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField 
-                                name="preco"
-                                control={formProducts.control}
-                                render={({field}) => (
-                                    <FormItem>
-                                        <FormLabel></FormLabel>
-                                        <FormControl>
-                                            <Input type="text" placeholder="Preco" {...field} onChange={(e) => field.onChange(Number(e.target.value))}/>
-                                        </FormControl>
-                                        <FormMessage></FormMessage>
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField 
-                                name="descricao"
-                                control={formProducts.control}
-                                render={({field}) => (
-                                    <FormItem>
-                                        <FormLabel></FormLabel>
-                                        <FormControl>
-                                            <Input type="text" placeholder="Descrição" {...field}/>
-                                        </FormControl>
-                                        <FormMessage></FormMessage>
-                                    </FormItem>
-                                )}
-                            />
-                            <Button type="submit" variant={"outline"}>Criar</Button>
-                        </form>
-                   </Form>
-               </section>
+                <TableProducts data={tableData} switchBtn={switchBtn}></TableProducts>
             </CardContent>
         </Card>
     )
