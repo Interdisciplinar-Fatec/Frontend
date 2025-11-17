@@ -2,25 +2,24 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
-import {zodResolver} from "@hookform/resolvers/zod"
-import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { useGetOrderUser } from "@/http/get/useGetOrderUser";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useLoginAdmin } from "@/http/post/useLoginAdmin";
 
 const formSchema = z.object({
-    CPF: z.string().min(11, "CPF deve ter no mínimo 11 caracteres"),
-    Senha: z.string().optional(),
-})
+  CPF: z.string().min(11, "CPF deve ter no mínimo 11 caracteres"),
+  Senha: z.string().optional(),
+});
 
 export const FormOrder = () => {
   const { mutateAsync: postLogin } = useLoginAdmin();
-
   const [CPFValue, setCPFValue] = useState<string | undefined>();
   const [isAdminForm, setIsAdminForm] = useState(false);
 
-  const { data: dataUserOrders, error: dataUserError} = useGetOrderUser(CPFValue);
+  const { data: dataUserOrders, error: dataUserError } = useGetOrderUser(CPFValue);
   const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -40,24 +39,24 @@ export const FormOrder = () => {
     }
 
     if (!("adminCPF" in dataUserOrders)) {
-        navigate("/user/order");
+      navigate("/user/order");
     }
   }, [dataUserOrders, navigate]);
 
   useEffect(() => {
-  if (dataUserError) {
-    const err = dataUserError as { status?: number; message?: string };
+    if (dataUserError) {
+      const err = dataUserError as { status?: number; message?: string };
 
-    if (err.status === 404) {
-      form.setError("CPF", {
-        type: "manual",
-        message: "CPF inválido!",
-      });
-      setCPFValue(undefined); 
-      return;
+      if (err.status === 404) {
+        form.setError("CPF", {
+          type: "manual",
+          message: "CPF inválido!",
+        });
+        setCPFValue(undefined);
+        return;
+      }
     }
-  }
-}, [dataUserError, form]);
+  }, [dataUserError, form]);
 
   const handleForm = async (values: z.infer<typeof formSchema>) => {
     try {
@@ -93,7 +92,6 @@ export const FormOrder = () => {
       }
 
       if (loginError.status === 404) {
-        console.log("testeeee")
         form.setError("CPF", {
           type: "manual",
           message: "CPF inválido!",
@@ -112,25 +110,25 @@ export const FormOrder = () => {
             event.preventDefault();
             form.handleSubmit(handleForm)(event);
           }}
-          className="flex items-end flex-col sm:gap-2 gap-4 sm:flex-row relative"
+          className="flex flex-col sm:flex-row sm:items-end sm:gap-2 gap-4 relative w-full"
         >
-          <FormField
-            control={form.control}
-            name="CPF"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-orange-500">CPF:</FormLabel>
-                <FormControl>
-                  <Input
-                    className="bg-orange-50 border border-orange-500 text-orange-700 placeholder-orange-400 sm:w-53 xss:w-45 w-30"
-                    placeholder="12345678910"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage className="absolute bottom-[-25px]" />
+            <FormField
+              control={form.control}
+              name="CPF"
+              render={({ field }) => (
+                <FormItem className="flex-1">
+                  <FormLabel className="text-orange-500">CPF:</FormLabel>
+                  <FormControl>
+                    <Input
+                      className="bg-orange-50 border border-orange-500 text-orange-700 placeholder-orange-400 w-full"
+                      placeholder="12345678910"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage className="mt-1 !text-red-500 text-sm" />
               </FormItem>
-            )}
-          />
+              )}
+            />
 
 
           {isAdminForm && (
@@ -138,31 +136,28 @@ export const FormOrder = () => {
               control={form.control}
               name="Senha"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="flex-1">
                   <FormLabel className="text-white">Senha do Admin</FormLabel>
                   <FormControl>
                     <Input
                       type="password"
-                      className="text-white sm:w-53 xss:w-45 w-30"
+                      className="text-white sm:w-52 w-full"
                       placeholder="Senha"
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage className="absolute bottom-[-25px]" />
-                </FormItem>
+                 <FormMessage className="mt-1 text-red-500 text-sm" />
+ </FormItem>
               )}
             />
           )}
 
-        <Button
-        type="submit"
-        className="bg-orange-500 text-white border border-orange-500 rounded-lg px-4 py-2 hover:bg-white hover:text-orange-500 transition-colors"
-        >
-        Entrar
-        </Button>
-
-
-
+          <Button
+            type="submit"
+            className="bg-orange-500 text-white border border-orange-500 rounded-lg px-4 py-2 hover:bg-white hover:text-orange-500 transition-colors w-full sm:w-auto"
+          >
+            Entrar
+          </Button>
         </form>
       </Form>
     </div>
