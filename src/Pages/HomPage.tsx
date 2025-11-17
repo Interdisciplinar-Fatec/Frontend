@@ -27,9 +27,16 @@ export  function HomePage(){
                             className="w-[140px] md:w-[200px] lg:w-[250px] h-auto object-contain"
                             />
                         </section>
-                        <section className="flex flex-col w-full max-w-sm items-center gap-4 flex-1">
+                        <section className="flex flex-col w-full max-w-sm items-center gap-0 flex-1">
+                            {/* Texto informativo */}
+                            <p className="text-white text-lg font-semibold -mt-12">
+                                Entre com a sua credencial
+                            </p>
                             <FormOrder />
+                                          
+
                         </section>
+
             
 
             { enabledCookie ? null : (
