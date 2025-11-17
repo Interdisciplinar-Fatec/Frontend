@@ -12,15 +12,12 @@ import {
 import { Fragment, useState } from "react"
 import { useUpdateOrderStatus } from "@/http/patch/useUpdateOrderStatus"
 
-export const TableUserOrders = ({data, admin}: {data: getOrderUserType, admin: boolean}, ) => {
+export const TableUserOrders = ({ data, admin }: { data: getOrderUserType; admin: boolean }) => {
     const statuses = ["Pendente", "Em Progresso", "Finalizado"]
     const [expandRow, setExpandRow] = useState<string | null>(null)
     const { mutate: updateStatus, isPending } = useUpdateOrderStatus()
 
-    const handleToggleRow = (id: string) => {
-        setExpandRow(expandRow === id ? null : id)
-    }
-
+    const handleToggleRow = (id: string) => setExpandRow(expandRow === id ? null : id)
     const handleChange = (pedidoId: string, userId: string, newStatus: string) => {
         updateStatus({ pedidoId, userId, status: newStatus })
     }
@@ -28,93 +25,120 @@ export const TableUserOrders = ({data, admin}: {data: getOrderUserType, admin: b
     const cliente = data.user.name
 
     return (
-        <Table className="text-black">
+        <Table className="w-full bg-white text-black rounded-lg shadow overflow-hidden">
+            {/* Cabeçalho */}
             <TableHeader>
-                <TableRow>
-                    <TableHead className="text-gray-400 font-bold">Cliente</TableHead>
-                    <TableHead className="text-gray-400 font-bold">Status</TableHead>
-                    <TableHead className="text-gray-400 font-bold">Data</TableHead>
-                    <TableHead className="text-gray-400 font-bold">Quantidade</TableHead>
-                    <TableHead className="text-gray-400 font-bold">Valor</TableHead>
+                <TableRow className="bg-gray-200 border-b-2 border-gray-300">
+                    <TableHead className="text-black font-bold p-3">Cliente</TableHead>
+                    <TableHead className="text-black font-bold p-3">Status</TableHead>
+                    <TableHead className="text-black font-bold p-3">Data</TableHead>
+                    <TableHead className="text-black font-bold p-3">Quantidade</TableHead>
+                    <TableHead className="text-black font-bold p-3">Valor</TableHead>
                 </TableRow>
             </TableHeader>
-            <TableBody className="xs:text-xs overflow-x-auto">
-                {
-                        data.pedidos.length <= 0 ? (
-                            <TableRow>
-                                <TableCell colSpan={4} className="p-0">
-                                    <div className="w-full text-center mt-2">
-                                        Sem pedidos
-                                    </div>
+
+            {/* Corpo da tabela */}
+            <TableBody>
+                {data.pedidos.length <= 0 ? (
+                    <TableRow>
+                        <TableCell colSpan={5} className="p-4 text-center text-gray-400">
+                            Sem pedidos
+                        </TableCell>
+                    </TableRow>
+                ) : (
+                    data.pedidos.map((p, index) => (
+                        <Fragment key={p.PedidoId}>
+                            {/* Linha principal */}
+                            <TableRow
+                                onClick={() => handleToggleRow(p.PedidoId)}
+                                className={`cursor-pointer transition-colors duration-200 ${
+                                    expandRow === p.PedidoId
+                                        ? "bg-gray-100"
+                                        : index % 2 === 0
+                                        ? "bg-white hover:bg-gray-50"
+                                        : "bg-gray-50 hover:bg-gray-100"
+                                }`}
+                            >
+                                <TableCell className="p-3">{cliente}</TableCell>
+                                <TableCell className="p-3">
+                                    {admin ? (
+                                        <select
+                                            value={p.Status ?? ""}
+                                            className="border border-gray-400 rounded px-2 py-1 bg-white text-black"
+                                            disabled={isPending}
+                                            onChange={(e) =>
+                                                handleChange(p.PedidoId, data.user.id, e.target.value)
+                                            }
+                                        >
+                                            <option value={p.Status ?? ""}>
+                                                {p.Status ?? "Selecione"}
+                                            </option>
+                                            {statuses
+                                                .filter((s) => s !== p.Status)
+                                                .map((s) => (
+                                                    <option key={s} value={s}>
+                                                        {s}
+                                                    </option>
+                                                ))}
+                                        </select>
+                                    ) : (
+                                        <p
+                                            className={`font-semibold ${
+                                                p.Status === "Finalizado"
+                                                    ? "text-green-500"
+                                                    : p.Status === "Em Progresso"
+                                                    ? "text-orange-500"
+                                                    : "text-orange-500"
+                                            }`}
+                                        >
+                                            {p.Status}
+                                        </p>
+                                    )}
                                 </TableCell>
-                        </TableRow>     
-                    ): data?.pedidos.map((p) => {
-                        return (
-                            <Fragment key={p.PedidoId}>
-                                    <TableRow key={p.PedidoId} onClick={() => handleToggleRow(p.PedidoId)} className={`cursor-pointer ${expandRow === p.PedidoId ? "bg-gray-100" : "bg-transparent"}`}>
-                                        <TableCell>{cliente}</TableCell>
-                                        <TableCell className="flex gap-1">
-                                           {
-                                            admin ? (
-                                                 <select value={p.Status ?? ""}
-                                                    className="border border-gray-300 rounded px-2 py-1"
-                                                    disabled={isPending}
-                                                    onChange={(e) => handleChange(p.PedidoId, data.user.id, e.target.value)}
-                                                >
-                                                    <option value={p.Status ?? ""}>{p.Status ?? "Selecione"}</option>
-                                                    {statuses
-                                                        .filter((s) => s !== p.Status) 
-                                                        .map((s) => (
-                                                        <option key={s} value={s}>
-                                                            {s}
-                                                        </option>
-                                                        ))}
-                                                </select>
+                                <TableCell className="p-3">{dayjs(p.DataPedido).format("DD/MM/YYYY")}</TableCell>
+                                <TableCell className="p-3">{p.Produtos.length}</TableCell>
+                                <TableCell className="p-3">{p.ValorPedido}</TableCell>
+                            </TableRow>
 
-                                            ) : (
-                                                <h2>{p.Status}</h2>
-                                            )
-                                           }
-                                        </TableCell>
-                                        <TableCell>{dayjs(p.DataPedido).format("DD/MM/YYYY")}</TableCell>
-                                        <TableCell>{ p.Produtos.length}</TableCell>
-                                        <TableCell>{p.ValorPedido}</TableCell>
-                                </TableRow> 
-
-                                <TableRow
-                                    className={`cursor-pointer ${
-                                    expandRow === p.PedidoId ? "max-h-[400px]" : "max-h-0"
-                                    }`}
-                                >
-                                    <TableCell colSpan={4} className="p-0 bg-gray-50">
-                                    <div className={`${expandRow === p.PedidoId ? "p-4 opacity-100" : "p-0 opacity-0"}`}>
+                            {/* Linha expandida */}
+                            <TableRow>
+                                <TableCell colSpan={5} className="p-0">
+                                    <div
+                                        className={`transition-all duration-200 ${
+                                            expandRow === p.PedidoId
+                                                ? "opacity-100 bg-gray-100 text-gray-700 rounded-b-lg flex border-l-4 border-orange-500"
+                                                : "opacity-0 h-0"
+                                        }`}
+                                    >
                                         {expandRow === p.PedidoId && (
-                                        <div className="text-sm text-gray-500">
-                                            <strong>Produtos:</strong>
-                                            <ul className="pl-4 list-disc">
-                                            {p.Produtos.map((pr) => (
-                                                <li key={pr.id}>
-                                                {pr.Nome} — {pr.Preco}
-                                                </li>
-                                            ))}
-                                            </ul>
+                                            <div className="p-4 flex-1">
+                                                <strong className="text-orange-500">Produtos:</strong>
+                                                <ul className="pl-4 list-disc text-gray-700">
+                                                    {p.Produtos.map((pr) => (
+                                                        <li key={pr.id}>
+                                                            {pr.Nome} — {pr.Preco}
+                                                        </li>
+                                                    ))}
+                                                </ul>
 
-                                            {p.descricaoPedido && (
-                                            <>
-                                                <strong className="block mt-2">Descrição:</strong>
-                                                <p>{p.descricaoPedido}</p>
-                                            </>
-                                            )}
-                                        </div>
+                                                {p.descricaoPedido && (
+                                                    <>
+                                                        <strong className="block mt-2 text-orange-500">
+                                                            Descrição:
+                                                        </strong>
+                                                        <p>{p.descricaoPedido}</p>
+                                                    </>
+                                                )}
+                                            </div>
                                         )}
                                     </div>
-                                    </TableCell>
-                                </TableRow>     
-                            </Fragment>                 
-                        )
-                    })
-                }
+                                </TableCell>
+                            </TableRow>
+                        </Fragment>
+                    ))
+                )}
             </TableBody>
+
             <TableCaption></TableCaption>
         </Table>
     )

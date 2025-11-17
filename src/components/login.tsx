@@ -119,11 +119,11 @@ export const FormOrder = () => {
             name="CPF"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-white">CPF:</FormLabel>
+                <FormLabel className="text-orange-500">CPF:</FormLabel>
                 <FormControl>
                   <Input
-                    className="text-white sm:w-53 xss:w-45 w-30"
-                    placeholder="CPF"
+                    className="bg-orange-50 border border-orange-500 text-orange-700 placeholder-orange-400 sm:w-53 xss:w-45 w-30"
+                    placeholder="12345678910"
                     {...field}
                   />
                 </FormControl>
@@ -131,6 +131,7 @@ export const FormOrder = () => {
               </FormItem>
             )}
           />
+
 
           {isAdminForm && (
             <FormField
@@ -153,9 +154,15 @@ export const FormOrder = () => {
             />
           )}
 
-          <Button type="submit" variant="outline">
-            Entrar
-          </Button>
+        <Button
+        type="submit"
+        className="bg-orange-500 text-white border border-orange-500 rounded-lg px-4 py-2 hover:bg-white hover:text-orange-500 transition-colors"
+        >
+        Entrar
+        </Button>
+
+
+
         </form>
       </Form>
     </div>
